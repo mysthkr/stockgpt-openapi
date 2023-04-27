@@ -34,25 +34,25 @@ servers:
         default: '443'
 
 tags:
-  - name: CategoryGrocery
-    description: Access to category_grocery model.
+  - name: CategoryProduct
+    description: Access to category_product model.
 
 paths:
-  /category_grocerys:
+  /category_products:
     post:
       tags:
-      - "CategoryGrocery"
-      summary: CreateCategoryGrocery
-      operationId: createCategoryGrocery
+      - "CategoryProduct"
+      summary: CreateCategoryProduct
+      operationId: createCategoryProduct
       requestBody:
-        $ref: '#/components/requestBodies/CreateCategoryGroceryRequestBody'
+        $ref: '#/components/requestBodies/CreateCategoryProductRequestBody'
       responses:
         '200':
-          description: 作成済み食料品カテゴリー
+          description: 作成済み日用品カテゴリー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CategoryGroceryModel'
+                $ref: '#/components/schemas/CategoryProductModel'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -63,13 +63,13 @@ paths:
   
     get:
       tags:
-      - "CategoryGrocery"
-      summary: 食料品カテゴリー一覧取得
-      description: 食料品カテゴリー一覧
-      operationId: getCategoryGroceryList
+      - "CategoryProduct"
+      summary: 日用品カテゴリー一覧取得
+      description: 日用品カテゴリー一覧
+      operationId: getCategoryProductList
       responses:
         '200':
-          $ref: '#/components/responses/GetCategoryGrocerysResponse'
+          $ref: '#/components/responses/GetCategoryProductsResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -77,18 +77,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /category_grocerys/{id}:
+  /category_products/{id}:
     parameters:
-      - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      - $ref: '#/components/parameters/CategoryProductIdParameter'
     get:
       tags:
-        - "CategoryGrocery"
-      summary: GetCategoryGroceryById
+        - "CategoryProduct"
+      summary: GetCategoryProductById
       description: |-
-        Get category_grocery by id.
+        Get category_product by id.
       responses:
         '200':
-          $ref: '#/components/responses/GetCategoryGroceryResponse'
+          $ref: '#/components/responses/GetCategoryProductResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -102,17 +102,17 @@ paths:
           
     patch:
       tags:
-        - "CategoryGrocery"
-      summary: UpdateCategoryGroceryById
+        - "CategoryProduct"
+      summary: UpdateCategoryProductById
       description: |-
-        Update category_grocery by id.
+        Update category_product by id.
       parameters:
-        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+        - $ref: '#/components/parameters/CategoryProductIdParameter'
       requestBody:
-        $ref: '#/components/requestBodies/UpdateCategoryGroceryRequestBody'
+        $ref: '#/components/requestBodies/UpdateCategoryProductRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateCategoryGroceryResponse'
+          $ref: '#/components/responses/UpdateCategoryProductResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -126,15 +126,15 @@ paths:
   
     delete:
       tags:
-        - "CategoryGrocery"
-      summary: DeleteCategoryGroceryById
+        - "CategoryProduct"
+      summary: DeleteCategoryProductById
       description: |-
-        Delete category_grocery by id.
+        Delete category_product by id.
       parameters:
-        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+        - $ref: '#/components/parameters/CategoryProductIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetCategoryGroceryResponse'
+          $ref: '#/components/responses/GetCategoryProductResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -146,18 +146,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /category_grocerys/{id}/edit:
+  /category_products/{id}/edit:
     parameters:
-      - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      - $ref: '#/components/parameters/CategoryProductIdParameter'
     get:
       tags:
-        - "CategoryGrocery"
-      summary: EditCategoryGroceryById
+        - "CategoryProduct"
+      summary: EditCategoryProductById
       parameters:
-        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+        - $ref: '#/components/parameters/CategoryProductIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetCategoryGroceryResponse'
+          $ref: '#/components/responses/GetCategoryProductResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -172,9 +172,9 @@ paths:
 components:
   schemas:
   #-------------------------------
-  # CategoryGrocery schema
+  # CategoryProduct schema
   #-------------------------------  
-    CategoryGroceryDynamicProps:
+    CategoryProductDynamicProps:
       type: object
       properties:
         name:
@@ -188,13 +188,13 @@ components:
           description: updated datetime
           example: 2023-01-21T17:32:28Z
     
-    CategoryGroceryStaticProps:
+    CategoryProductStaticProps:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: category_grocery id
+          description: category_product id
           example: 2
         created_at:
           type: string
@@ -202,13 +202,13 @@ components:
           description: created datetime
           example: 2023-01-21T17:32:28Z
           
-    CategoryGroceryStaticPropsTwo:
+    CategoryProductStaticPropsTwo:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: category_grocery id
+          description: category_product id
           example: 3
         created_at:
           type: string
@@ -216,19 +216,19 @@ components:
           description: created datetime
           example: 2023-01-39T22:32:22Z
           
-    CategoryGroceryModel:
+    CategoryProductModel:
       type: object
-      description: CategoryGrocery
+      description: CategoryProduct
       allOf:
-        - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
-        - $ref: '#/components/schemas/CategoryGroceryStaticProps'
+        - $ref: '#/components/schemas/CategoryProductDynamicProps'
+        - $ref: '#/components/schemas/CategoryProductStaticProps'
         
-    CategoryGroceryModelTwo:
+    CategoryProductModelTwo:
       type: object
-      description: CategoryGrocery
+      description: CategoryProduct
       allOf:
-        - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
-        - $ref: '#/components/schemas/CategoryGroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/CategoryProductDynamicProps'
+        - $ref: '#/components/schemas/CategoryProductStaticPropsTwo'
       properties:
         name:
           type: string
@@ -241,17 +241,17 @@ components:
           description: updated datetime
           example: 2023-01-28T17:32:28Z
           
-    CategoryGroceryModels:
+    CategoryProductModels:
       type: object
       properties:
-        category_grocerys:
+        category_products:
           type: array
           items:
             oneOf:
             - type: object
-              $ref: '#/components/schemas/CategoryGroceryModel'
+              $ref: '#/components/schemas/CategoryProductModel'
             - type: object
-              $ref: '#/components/schemas/CategoryGroceryModelTwo'
+              $ref: '#/components/schemas/CategoryProductModelTwo'
               
     
     ErrorModel:
@@ -274,10 +274,10 @@ components:
   # Reusable operation parameters
   #-------------------------------
   parameters:
-    CategoryGroceryIdParameter:
+    CategoryProductIdParameter:
       name: id
       in: path
-      description: CategoryGrocery id.
+      description: CategoryProduct id.
       required: true
       schema:
         type: integer
@@ -287,22 +287,22 @@ components:
   # Reusable request body
   #-------------------------------  
   requestBodies:
-    CreateCategoryGroceryRequestBody:
-      description: category_grocery data
+    CreateCategoryProductRequestBody:
+      description: category_product data
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/CategoryGroceryModel'
+            $ref: '#/components/schemas/CategoryProductModel'
             
-    UpdateCategoryGroceryRequestBody:
-      description: category_grocery data
+    UpdateCategoryProductRequestBody:
+      description: category_product data
       required: true
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+              - $ref: '#/components/schemas/CategoryProductDynamicProps'
               - properties:
                   name:
                     type: string
@@ -322,40 +322,40 @@ components:
   # Reusable responses
   #-------------------------------
   responses:
-    GetCategoryGrocerysResponse:
-        description: CategoryGrocery lists
+    GetCategoryProductsResponse:
+        description: CategoryProduct lists
         content:
           application/json:
             schema:
               allOf:
               - required:
-                - category_grocerys
+                - category_products
               - type: object
               - properties:
-                  category_grocerys:
+                  category_products:
                     type: array
                     items:
                       oneOf:
                       - type: object
-                        $ref: '#/components/schemas/CategoryGroceryModel'
+                        $ref: '#/components/schemas/CategoryProductModel'
                       - type: object
-                        $ref: '#/components/schemas/CategoryGroceryModelTwo'
+                        $ref: '#/components/schemas/CategoryProductModelTwo'
     
-    GetCategoryGroceryResponse:
-      description: Got category_grocery.
+    GetCategoryProductResponse:
+      description: Got category_product.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CategoryGroceryModel'
+              - $ref: '#/components/schemas/CategoryProductModel'
               
-    UpdateCategoryGroceryResponse:
-      description: Updated category_grocery.
+    UpdateCategoryProductResponse:
+      description: Updated category_product.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CategoryGroceryModel'
+              - $ref: '#/components/schemas/CategoryProductModel'
               - properties:
                   name:
                     type: string
