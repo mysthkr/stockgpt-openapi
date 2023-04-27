@@ -1,0 +1,470 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: SubCategoryProduct
+    description: Access to category_product model.
+
+paths:
+  /sub_category_products:
+    post:
+      tags:
+      - "SubCategoryProduct"
+      summary: CreateSubCategoryProduct
+      operationId: createSubCategoryProduct
+      requestBody:
+        $ref: '#/components/requestBodies/CreateSubCategoryProductRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品サブカテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategoryProductModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "SubCategoryProduct"
+      summary: 食料品サブカテゴリー一覧取得
+      description: 食料品サブカテゴリー一覧
+      operationId: getSubCategoryProductList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+    get:
+      tags:
+        - "SubCategoryProduct"
+      summary: GetSubCategoryProductById
+      description: |-
+        Get category_product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "SubCategoryProduct"
+      summary: UpdateSubCategoryProductById
+      description: |-
+        Update category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateSubCategoryProductRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateSubCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "SubCategoryProduct"
+      summary: DeleteSubCategoryProductById
+      description: |-
+        Delete category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_products/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+    get:
+      tags:
+        - "SubCategoryProduct"
+      summary: EditSubCategoryProductById
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # SubCategoryProduct schema
+  #-------------------------------  
+    SubCategoryProductDynamicProps:
+      type: object
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 2
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+    
+    SubCategoryProductStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    SubCategoryProductStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-39T22:32:22Z
+          
+    SubCategoryProductModel:
+      type: object
+      description: SubCategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryProductStaticProps'
+        
+    SubCategoryProductModelTwo:
+      type: object
+      description: SubCategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryProductStaticPropsTwo'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 3
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-11T13:32:28Z
+          
+    SubCategoryProductModels:
+      type: object
+      properties:
+        sub_category_products:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/SubCategoryProductModel'
+            - type: object
+              $ref: '#/components/schemas/SubCategoryProductModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    SubCategoryProductIdParameter:
+      name: id
+      in: path
+      description: SubCategoryProduct id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateSubCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubCategoryProductModel'
+            
+    UpdateSubCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-04-21T17:32:28Z
+            
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetSubCategoryProductsResponse:
+        description: SubCategoryProduct lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - sub_category_products
+              - type: object
+              - properties:
+                  sub_category_products:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryProductModel'
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryProductModelTwo'
+    
+    GetSubCategoryProductResponse:
+      description: Got category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductModel'
+              
+    UpdateSubCategoryProductResponse:
+      description: Updated category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductModel'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-04-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
