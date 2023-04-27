@@ -48,7 +48,7 @@ paths:
         $ref: '#/components/requestBodies/CreateSubCategoryProductRequestBody'
       responses:
         '200':
-          description: 作成済み食料品サブカテゴリー
+          description: 作成済み日用品サブカテゴリー
           content:
             application/json:
               schema:
@@ -64,8 +64,8 @@ paths:
     get:
       tags:
       - "SubCategoryProduct"
-      summary: 食料品サブカテゴリー一覧取得
-      description: 食料品サブカテゴリー一覧
+      summary: 日用品サブカテゴリー一覧取得
+      description: 日用品サブカテゴリー一覧
       operationId: getSubCategoryProductList
       responses:
         '200':
