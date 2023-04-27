@@ -1,0 +1,504 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Product
+    description: Access to product model.
+
+paths:
+  /products:
+    post:
+      tags:
+      - "Product"
+      summary: CreateProduct
+      operationId: createProduct
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProductRequestBody'
+      responses:
+        '200':
+          description: 作成済み日用品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Product"
+      summary: 日用品一覧取得
+      description: 日用品一覧
+      operationId: getProductList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProductIdParameter'
+    get:
+      tags:
+        - "Product"
+      summary: GetProductById
+      description: |-
+        Get product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Product"
+      summary: UpdateProductById
+      description: |-
+        Update product by id.
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProductRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Product"
+      summary: DeleteProductById
+      description: |-
+        Delete product by id.
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /products/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ProductIdParameter'
+    get:
+      tags:
+        - "Product"
+      summary: EditProductById
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Product schema
+  #-------------------------------  
+    ProductDynamicProps:
+      type: object
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 4
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 4
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 4
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+    
+    ProductStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: product id
+          example: 4
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    ProductStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: product id
+          example: 5
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+    
+    ProductMakerOption:
+      type: object
+      properties:
+        maker_id:
+          type: integer
+          example: 4
+          
+    ProductPictureOption:
+      type: object
+      properties:
+        picture:
+          type: string
+          example: image4.png
+          
+          
+    ProductModel:
+      type: object
+      description: Product
+      allOf:
+        - $ref: '#/components/schemas/ProductDynamicProps'
+        - $ref: '#/components/schemas/ProductStaticProps'
+        - $ref: '#/components/schemas/ProductMakerOption'
+        - $ref: '#/components/schemas/ProductPictureOption'
+        
+    ProductModelTwo:
+      type: object
+      description: Product
+      allOf:
+        - $ref: '#/components/schemas/ProductDynamicProps'
+        - $ref: '#/components/schemas/ProductStaticPropsTwo'
+        - $ref: '#/components/schemas/ProductMakerOption'
+        - $ref: '#/components/schemas/ProductPictureOption'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 5
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 5
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 5
+          
+    ProductModels:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/ProductModel'
+            - type: object
+              $ref: '#/components/schemas/ProductModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    ProductIdParameter:
+      name: id
+      in: path
+      description: Product id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateProductRequestBody:
+      description: product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductModel'
+            
+    UpdateProductRequestBody:
+      description: product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProductDynamicProps'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-01-21T17:32:28Z
+            
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetProductsResponse:
+        description: Product lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - products
+              - type: object
+              - properties:
+                  products:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ProductModel'
+                      - type: object
+                        $ref: '#/components/schemas/ProductModelTwo'
+    
+    GetProductResponse:
+      description: Got product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProductModel'
+              
+    UpdateProductResponse:
+      description: Updated product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProductModel'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-01-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
