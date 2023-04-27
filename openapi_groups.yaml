@@ -1,0 +1,510 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Profile
+    description: Access to profile model.
+
+paths:
+  /profiles:
+    post:
+      tags:
+      - "Profile"
+      summary: CreateProfile
+      operationId: createProfile
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProfileRequestBody'
+      responses:
+        '200':
+          description: 作成済みプロファイル
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Profile"
+      summary: プロファイル一覧取得
+      description: プロファイル一覧
+      operationId: getProfileList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfilesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /profiles/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProfileIdParameter'
+    get:
+      tags:
+        - "Profile"
+      summary: GetProfileById
+      description: |-
+        Get profile by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Profile"
+      summary: UpdateProfileById
+      description: |-
+        Update profile by id.
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProfileRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProfileResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Profile"
+      summary: DeleteProfileById
+      description: |-
+        Delete profile by id.
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /profiles/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ProfileIdParameter'
+    get:
+      tags:
+        - "Profile"
+      summary: EditProfileById
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Profile schema
+  #-------------------------------  
+    ProfileDynamicProps:
+      type: object
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testname
+        nickname:
+          type: string
+          format: int64
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 2
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 北海道
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+    
+    ProfileStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: profile id
+          example: 2
+        user_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    ProfileStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: profile id
+          example: 3
+        user_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    ProfileModel:
+      type: object
+      description: Profile
+      allOf:
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticProps'
+        
+    ProfileModelTwo:
+      type: object
+      description: Profile
+      allOf:
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticPropsTwo'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testnametwo
+        nickname:
+          type: string
+          format: int64
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 3
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 沖縄県
+          
+    ProfileModels:
+      type: object
+      properties:
+        profiles:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/ProfileModel'
+            - type: object
+              $ref: '#/components/schemas/ProfileModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    ProfileIdParameter:
+      name: id
+      in: path
+      description: Profile id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateProfileRequestBody:
+      description: profile data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProfileModel'
+            
+    UpdateProfileRequestBody:
+      description: profile data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileDynamicProps'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+            
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetProfilesResponse:
+        description: Profile lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - profiles
+              - type: object
+              - properties:
+                  profiles:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ProfileModel'
+                      - type: object
+                        $ref: '#/components/schemas/ProfileModelTwo'
+    
+    GetProfileResponse:
+      description: Got profile.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              
+    UpdateProfileResponse:
+      description: Updated profile.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
