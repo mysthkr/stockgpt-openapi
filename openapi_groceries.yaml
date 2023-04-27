@@ -1,0 +1,490 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Grocery
+    description: Access to grocery model.
+
+paths:
+  /grocerys:
+    post:
+      tags:
+      - "Grocery"
+      summary: CreateGrocery
+      operationId: createGrocery
+      requestBody:
+        $ref: '#/components/requestBodies/CreateGroceryRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Grocery"
+      summary: 食料品一覧取得
+      description: 食料品一覧
+      operationId: getGroceryList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGrocerysResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /grocerys/{id}:
+    parameters:
+      - $ref: '#/components/parameters/GroceryIdParameter'
+    get:
+      tags:
+        - "Grocery"
+      summary: GetGroceryById
+      description: |-
+        Get grocery by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Grocery"
+      summary: UpdateGroceryById
+      description: |-
+        Update grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroceryRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Grocery"
+      summary: DeleteGroceryById
+      description: |-
+        Delete grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /grocerys/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/GroceryIdParameter'
+    get:
+      tags:
+        - "Grocery"
+      summary: EditGroceryById
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Grocery schema
+  #-------------------------------  
+    GroceryDynamicProps:
+      type: object
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+    
+    GroceryStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: grocery id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    GroceryStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: grocery id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    GroceryModel:
+      type: object
+      description: Grocery
+      allOf:
+        - $ref: '#/components/schemas/GroceryDynamicProps'
+        - $ref: '#/components/schemas/GroceryStaticProps'
+        
+    GroceryModelTwo:
+      type: object
+      description: Grocery
+      allOf:
+        - $ref: '#/components/schemas/GroceryDynamicProps'
+        - $ref: '#/components/schemas/GroceryStaticPropsTwo'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+          
+    GroceryModels:
+      type: object
+      properties:
+        grocerys:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/GroceryModel'
+            - type: object
+              $ref: '#/components/schemas/GroceryModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    GroceryIdParameter:
+      name: id
+      in: path
+      description: Grocery id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateGroceryRequestBody:
+      description: grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GroceryModel'
+            
+    UpdateGroceryRequestBody:
+      description: grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryDynamicProps'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+            
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetGrocerysResponse:
+        description: Grocery lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - grocerys
+              - type: object
+              - properties:
+                  grocerys:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/GroceryModel'
+                      - type: object
+                        $ref: '#/components/schemas/GroceryModelTwo'
+    
+    GetGroceryResponse:
+      description: Got grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              
+    UpdateGroceryResponse:
+      description: Updated grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
