@@ -1,0 +1,128 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+tags:
+  - name: User
+    description: Access to user model.
+
+paths:
+  /users:
+    post:
+      tags:
+      - "User"
+      summary: CreateUser
+      operationId: createUser
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUserRequestBody'
+      responses:
+        default:
+          description: 作成済みユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+  
+    get:
+      tags:
+      - "User"
+      summary: ユーザ一覧取得
+      operationId: getUserList
+      responses:
+        default:
+          description: ユーザー一覧
+          $ref: '#/components/schemas/UserModel'
+    
+components:
+  schemas:
+    UserDynamicProps:
+      type: object
+      properties:
+        email:
+          type: string
+          format: int64
+          description: 投稿時承認者のユーザーID
+          example: 2
+    
+    UserStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 投稿時承認者のユーザーID
+          example: 21
+        group_id:
+          type: integer
+          format: int64
+          description: 投稿時承認者のユーザーID
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: 投稿時承認者のユーザーID
+          example: 2023-01-21T17:32:28Z
+        updated_at:
+          type: string
+          format: int64
+          description: 投稿時承認者のユーザーID
+          example: 2023-01-21T17:32:28Z
+          
+    UserAdminOption:
+      type: object
+      properties:
+        admin:
+          type: boolean
+          example: true
+          
+    UserBusinessOption:
+      type: object
+      properties:
+        business:
+          type: boolean
+          example: false
+          
+    UserModel:
+      type: object
+      description: User
+      allOf:
+        - $ref: '#/components/schemas/UserDynamicProps'
+        - $ref: '#/components/schemas/UserStaticProps'
+        - $ref: '#/components/schemas/UserAdminOption'
+        - $ref: '#/components/schemas/UserBusinessOption'
+  
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateUserRequestBody:
+      description: user data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserModel'
+            
+    UpdateUserRequestBody:
+      description: user data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserModel'
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+          
+          
+          
+          
+          
+          
+          
