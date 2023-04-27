@@ -34,25 +34,25 @@ servers:
         default: '443'
 
 tags:
-  - name: Profile
-    description: Access to profile model.
+  - name: Group
+    description: Access to group model.
 
 paths:
-  /profiles:
+  /groups:
     post:
       tags:
-      - "Profile"
-      summary: CreateProfile
-      operationId: createProfile
+      - "Group"
+      summary: CreateGroup
+      operationId: createGroup
       requestBody:
-        $ref: '#/components/requestBodies/CreateProfileRequestBody'
+        $ref: '#/components/requestBodies/CreateGroupRequestBody'
       responses:
         '200':
-          description: 作成済みプロファイル
+          description: 作成済みグループ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProfileModel'
+                $ref: '#/components/schemas/GroupModel'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -63,13 +63,13 @@ paths:
   
     get:
       tags:
-      - "Profile"
-      summary: プロファイル一覧取得
-      description: プロファイル一覧
-      operationId: getProfileList
+      - "Group"
+      summary: グループ一覧取得
+      description: グループ一覧
+      operationId: getGroupList
       responses:
         '200':
-          $ref: '#/components/responses/GetProfilesResponse'
+          $ref: '#/components/responses/GetGroupsResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -77,18 +77,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /profiles/{id}:
+  /groups/{id}:
     parameters:
-      - $ref: '#/components/parameters/ProfileIdParameter'
+      - $ref: '#/components/parameters/GroupIdParameter'
     get:
       tags:
-        - "Profile"
-      summary: GetProfileById
+        - "Group"
+      summary: GetGroupById
       description: |-
-        Get profile by id.
+        Get group by id.
       responses:
         '200':
-          $ref: '#/components/responses/GetProfileResponse'
+          $ref: '#/components/responses/GetGroupResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -102,17 +102,17 @@ paths:
           
     patch:
       tags:
-        - "Profile"
-      summary: UpdateProfileById
+        - "Group"
+      summary: UpdateGroupById
       description: |-
-        Update profile by id.
+        Update group by id.
       parameters:
-        - $ref: '#/components/parameters/ProfileIdParameter'
+        - $ref: '#/components/parameters/GroupIdParameter'
       requestBody:
-        $ref: '#/components/requestBodies/UpdateProfileRequestBody'
+        $ref: '#/components/requestBodies/UpdateGroupRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateProfileResponse'
+          $ref: '#/components/responses/UpdateGroupResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -126,15 +126,15 @@ paths:
   
     delete:
       tags:
-        - "Profile"
-      summary: DeleteProfileById
+        - "Group"
+      summary: DeleteGroupById
       description: |-
-        Delete profile by id.
+        Delete group by id.
       parameters:
-        - $ref: '#/components/parameters/ProfileIdParameter'
+        - $ref: '#/components/parameters/GroupIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetProfileResponse'
+          $ref: '#/components/responses/GetGroupResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -146,18 +146,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /profiles/{id}/edit:
+  /groups/{id}/edit:
     parameters:
-      - $ref: '#/components/parameters/ProfileIdParameter'
+      - $ref: '#/components/parameters/GroupIdParameter'
     get:
       tags:
-        - "Profile"
-      summary: EditProfileById
+        - "Group"
+      summary: EditGroupById
       parameters:
-        - $ref: '#/components/parameters/ProfileIdParameter'
+        - $ref: '#/components/parameters/GroupIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetProfileResponse'
+          $ref: '#/components/responses/GetGroupResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -172,9 +172,9 @@ paths:
 components:
   schemas:
   #-------------------------------
-  # Profile schema
+  # Group schema
   #-------------------------------  
-    ProfileDynamicProps:
+    GroupDynamicProps:
       type: object
       properties:
         name:
@@ -203,13 +203,13 @@ components:
           description: updated datetime
           example: 2023-01-21T17:32:28Z
     
-    ProfileStaticProps:
+    GroupStaticProps:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: profile id
+          description: group id
           example: 2
         user_id:
           type: integer
@@ -222,13 +222,13 @@ components:
           description: created datetime
           example: 2023-01-21T17:32:28Z
           
-    ProfileStaticPropsTwo:
+    GroupStaticPropsTwo:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: profile id
+          description: group id
           example: 3
         user_id:
           type: integer
@@ -241,19 +241,19 @@ components:
           description: created datetime
           example: 2023-01-21T17:32:28Z
           
-    ProfileModel:
+    GroupModel:
       type: object
-      description: Profile
+      description: Group
       allOf:
-        - $ref: '#/components/schemas/ProfileDynamicProps'
-        - $ref: '#/components/schemas/ProfileStaticProps'
+        - $ref: '#/components/schemas/GroupDynamicProps'
+        - $ref: '#/components/schemas/GroupStaticProps'
         
-    ProfileModelTwo:
+    GroupModelTwo:
       type: object
-      description: Profile
+      description: Group
       allOf:
-        - $ref: '#/components/schemas/ProfileDynamicProps'
-        - $ref: '#/components/schemas/ProfileStaticPropsTwo'
+        - $ref: '#/components/schemas/GroupDynamicProps'
+        - $ref: '#/components/schemas/GroupStaticPropsTwo'
       properties:
         name:
           type: string
@@ -276,17 +276,17 @@ components:
           description: prefecture
           example: 沖縄県
           
-    ProfileModels:
+    GroupModels:
       type: object
       properties:
-        profiles:
+        groups:
           type: array
           items:
             oneOf:
             - type: object
-              $ref: '#/components/schemas/ProfileModel'
+              $ref: '#/components/schemas/GroupModel'
             - type: object
-              $ref: '#/components/schemas/ProfileModelTwo'
+              $ref: '#/components/schemas/GroupModelTwo'
               
     
     ErrorModel:
@@ -309,10 +309,10 @@ components:
   # Reusable operation parameters
   #-------------------------------
   parameters:
-    ProfileIdParameter:
+    GroupIdParameter:
       name: id
       in: path
-      description: Profile id.
+      description: Group id.
       required: true
       schema:
         type: integer
@@ -322,22 +322,22 @@ components:
   # Reusable request body
   #-------------------------------  
   requestBodies:
-    CreateProfileRequestBody:
-      description: profile data
+    CreateGroupRequestBody:
+      description: group data
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ProfileModel'
+            $ref: '#/components/schemas/GroupModel'
             
-    UpdateProfileRequestBody:
-      description: profile data
+    UpdateGroupRequestBody:
+      description: group data
       required: true
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ProfileDynamicProps'
+              - $ref: '#/components/schemas/GroupDynamicProps'
               - properties:
                   name:
                     type: string
@@ -372,40 +372,40 @@ components:
   # Reusable responses
   #-------------------------------
   responses:
-    GetProfilesResponse:
-        description: Profile lists
+    GetGroupsResponse:
+        description: Group lists
         content:
           application/json:
             schema:
               allOf:
               - required:
-                - profiles
+                - groups
               - type: object
               - properties:
-                  profiles:
+                  groups:
                     type: array
                     items:
                       oneOf:
                       - type: object
-                        $ref: '#/components/schemas/ProfileModel'
+                        $ref: '#/components/schemas/GroupModel'
                       - type: object
-                        $ref: '#/components/schemas/ProfileModelTwo'
+                        $ref: '#/components/schemas/GroupModelTwo'
     
-    GetProfileResponse:
-      description: Got profile.
+    GetGroupResponse:
+      description: Got group.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ProfileModel'
+              - $ref: '#/components/schemas/GroupModel'
               
-    UpdateProfileResponse:
-      description: Updated profile.
+    UpdateGroupResponse:
+      description: Updated group.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ProfileModel'
+              - $ref: '#/components/schemas/GroupModel'
               - properties:
                   name:
                     type: string
@@ -505,6 +505,3 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorModel'
-          
-          
-          
