@@ -177,32 +177,32 @@ components:
     UserDynamicProps:
       type: object
       properties:
-        user_id:
+        item_id:
           type: integer
           format: int64
-          description: user id
+          description: item id
           example: 2
-        request_type:
-          type: string
-          format: int64
-          description: category of product
-          example: category_products
-        request_name:
-          type: string
-          format: int64
-          description: request name
-          example: toilet
         updated_at:
           type: string
           format: int64
           description: updated datetime
           example: 2023-01-21T17:32:28Z
+        deleted_at:
+          type: string
+          format: int64
+          description: deleted datetime
+          example: null
           
     
     UserStaticProps:
       type: object
       properties:
         id:
+          type: integer
+          format: int64
+          description: user id
+          example: 2
+        group_id:
           type: integer
           format: int64
           description: user id
@@ -221,16 +221,21 @@ components:
           format: int64
           description: user id
           example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 3
         created_at:
           type: string
           format: int64
           description: created datetime
-          example: 2023-02-23T13:33:28Z
+          example: 2023-01-21T17:32:28Z
           
-    RequestRegisterFlagOption:
+    RequestBuyFlagOption:
       type: object
       properties:
-        register_flag:
+        buy_flag:
           type: boolean
           example: false
           
@@ -240,7 +245,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/UserDynamicProps'
         - $ref: '#/components/schemas/UserStaticProps'
-        - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        - $ref: '#/components/schemas/RequestBuyFlagOption'
         
     UserModelTwo:
       type: object
@@ -248,7 +253,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/UserDynamicProps'
         - $ref: '#/components/schemas/UserStaticPropsTwo'
-        - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        - $ref: '#/components/schemas/RequestBuyFlagOption'
       properties:
         user_id:
           type: integer
@@ -270,7 +275,7 @@ components:
           format: int64
           description: updated datetime
           example: 2023-03-23T11:12:11Z
-        register_flag:
+        buy_flag:
           type: boolean
           example: true
           
