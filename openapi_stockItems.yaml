@@ -1,0 +1,502 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: StockItem
+    description: Access to stockItem model.
+
+paths:
+  /stock_items:
+    post:
+      tags:
+      - "StockItem"
+      summary: CreateStockItem
+      operationId: createStockItem
+      requestBody:
+        $ref: '#/components/requestBodies/CreateStockItemRequestBody'
+      responses:
+        '200':
+          description: 作成済みユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItemModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "StockItem"
+      summary: ユーザ一覧取得
+      description: ユーザー一覧
+      operationId: getStockItemList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /stock_items/{id}:
+    parameters:
+      - $ref: '#/components/parameters/StockItemIdParameter'
+    get:
+      tags:
+        - "StockItem"
+      summary: GetStockItemById
+      description: |-
+        Get stockItem by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "StockItem"
+      summary: UpdateStockItemById
+      description: |-
+        Update stockItem by id.
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateStockItemRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateStockItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "StockItem"
+      summary: DeleteStockItemById
+      description: |-
+        Delete stockItem by id.
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /stock_items/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/StockItemIdParameter'
+    get:
+      tags:
+        - "StockItem"
+      summary: EditStockItemById
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # StockItem schema
+  #-------------------------------  
+    StockItemDynamicProps:
+      type: object
+      properties:
+        email:
+          type: string
+          format: int64
+          description: mail address
+          example: test@gmail.com
+        encrypted_password:
+          type: string
+          format: int64
+          description: password
+          example: password
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    StockItemStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: stockItem id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    StockItemStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: stockItem id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    StockItemAdminOption:
+      type: object
+      properties:
+        admin:
+          type: boolean
+          example: true
+          
+    StockItemBusinessOption:
+      type: object
+      properties:
+        business:
+          type: boolean
+          example: false
+          
+    StockItemModel:
+      type: object
+      description: StockItem
+      allOf:
+        - $ref: '#/components/schemas/StockItemDynamicProps'
+        - $ref: '#/components/schemas/StockItemStaticProps'
+        - $ref: '#/components/schemas/StockItemAdminOption'
+        - $ref: '#/components/schemas/StockItemBusinessOption'
+        
+    StockItemModelTwo:
+      type: object
+      description: StockItem
+      allOf:
+        - $ref: '#/components/schemas/StockItemDynamicProps'
+        - $ref: '#/components/schemas/StockItemStaticPropsTwo'
+        - $ref: '#/components/schemas/StockItemAdminOption'
+        - $ref: '#/components/schemas/StockItemBusinessOption'
+      properties:
+        email:
+          type: string
+          format: int64
+          description: mail address
+          example: test2@gmail.com
+        encrypted_password:
+          type: string
+          format: int64
+          description: password
+          example: password2
+        updated_at:
+          type: string
+          format: int64
+          description: uodated time
+          example: 2023-02-21T17:32:28Z
+        admin:
+          type: boolean
+          example: false
+          
+    StockItemModels:
+      type: object
+      properties:
+        stockItems:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/StockItemModel'
+            - type: object
+              $ref: '#/components/schemas/StockItemModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    StockItemIdParameter:
+      name: id
+      in: path
+      description: StockItem id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateStockItemRequestBody:
+      description: stockItem data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StockItemModel'
+            
+    UpdateStockItemRequestBody:
+      description: stockItem data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemDynamicProps'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+            
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetStockItemsResponse:
+        description: StockItem lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - stockItems
+              - type: object
+              - properties:
+                  stockItems:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/StockItemModel'
+                      - type: object
+                        $ref: '#/components/schemas/StockItemModelTwo'
+    
+    GetStockItemResponse:
+      description: Got stockItem.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              
+    UpdateStockItemResponse:
+      description: Updated stockItem.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
