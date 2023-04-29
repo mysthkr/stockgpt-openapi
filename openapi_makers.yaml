@@ -1,0 +1,461 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Maker
+    description: Access to maker model.
+
+paths:
+  /makers:
+    post:
+      tags:
+      - "Maker"
+      summary: CreateMaker
+      operationId: createMaker
+      requestBody:
+        $ref: '#/components/requestBodies/CreateMakerRequestBody'
+      responses:
+        '200':
+          description: 作成済みメーカー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MakerModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Maker"
+      summary: メーカー一覧取得
+      description: メーカー一覧
+      operationId: getMakerList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakersResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /makers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/MakerIdParameter'
+    get:
+      tags:
+        - "Maker"
+      summary: GetMakerById
+      description: |-
+        Get maker by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Maker"
+      summary: UpdateMakerById
+      description: |-
+        Update maker by id.
+      parameters:
+        - $ref: '#/components/parameters/MakerIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateMakerRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateMakerResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Maker"
+      summary: DeleteMakerById
+      description: |-
+        Delete maker by id.
+      parameters:
+        - $ref: '#/components/parameters/MakerIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakerResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /makers/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/MakerIdParameter'
+    get:
+      tags:
+        - "Maker"
+      summary: EditMakerById
+      parameters:
+        - $ref: '#/components/parameters/MakerIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Maker schema
+  #-------------------------------  
+    MakerDynamicProps:
+      type: object
+      properties:
+        name:
+          type: string
+          format: int64
+          description: criteria
+          example: kaou
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    MakerStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: maker id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    MakerStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: maker id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-02-23T17:32:28Z
+          
+    MakerModel:
+      type: object
+      description: Maker
+      allOf:
+        - $ref: '#/components/schemas/MakerDynamicProps'
+        - $ref: '#/components/schemas/MakerStaticProps'
+        
+    MakerModelTwo:
+      type: object
+      description: Maker
+      allOf:
+        - $ref: '#/components/schemas/MakerDynamicProps'
+        - $ref: '#/components/schemas/MakerStaticPropsTwo'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: criteria
+          example: kaou
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    MakerModels:
+      type: object
+      properties:
+        makers:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/MakerModel'
+            - type: object
+              $ref: '#/components/schemas/MakerModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    MakerIdParameter:
+      name: id
+      in: path
+      description: Maker id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateMakerRequestBody:
+      description: maker data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MakerModel'
+            
+    UpdateMakerRequestBody:
+      description: maker data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/MakerModel'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5
+                  price:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5555
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-23T13:32:28Z
+
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetMakersResponse:
+        description: Maker lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - makers
+              - type: object
+              - properties:
+                  makers:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/MakerModel'
+                      - type: object
+                        $ref: '#/components/schemas/MakerModelTwo'
+    
+    GetMakerResponse:
+      description: Got maker.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/MakerModel'
+              
+    UpdateMakerResponse:
+      description: Updated maker.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/MakerModel'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
