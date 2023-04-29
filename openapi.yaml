@@ -54,7 +54,9 @@ tags:
     description: Access to sub_category_product model.
   - name: StockItem
     description: Access to stockItem model.
-  
+  - name: Request
+    description: Access to request model.
+    
     
     
   - name: Item
@@ -1372,6 +1374,139 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   
+  /requests:
+    post:
+      tags:
+      - "Request"
+      summary: CreateRequest
+      operationId: createRequest
+      requestBody:
+        $ref: '#/components/requestBodies/CreateRequestRequestBody'
+      responses:
+        '200':
+          description: 作成済みリクエストー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Request"
+      summary: リクエスト覧取得
+      description: リクエストー一覧
+      operationId: getRequestList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /requests/{id}:
+    parameters:
+      - $ref: '#/components/parameters/RequestIdParameter'
+    get:
+      tags:
+        - "Request"
+      summary: GetRequestById
+      description: |-
+        Get request by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Request"
+      summary: UpdateRequestById
+      description: |-
+        Update request by id.
+      parameters:
+        - $ref: '#/components/parameters/RequestIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateRequestRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Request"
+      summary: DeleteRequestById
+      description: |-
+        Delete request by id.
+      parameters:
+        - $ref: '#/components/parameters/RequestIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /requests/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/RequestIdParameter'
+    get:
+      tags:
+        - "Request"
+      summary: EditRequestById
+      parameters:
+        - $ref: '#/components/parameters/RequestIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  
+  
   
   
   
@@ -2314,6 +2449,89 @@ components:
           description: price
           example: 33
   
+  #-------------------------------
+  # Request schema
+  #-------------------------------  
+    RequestDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        request_type:
+          type: string
+          format: int64
+          description: category of request
+          example: category_requests
+        request_name:
+          type: string
+          format: int64
+          description: request name
+          example: toilet
+          
+    
+    RequestStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: request id
+          example: 2
+          
+    RequestStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: request id
+          example: 3
+          
+    RequestRegisterFlagOption:
+      type: object
+      properties:
+        register_flag:
+          type: boolean
+          example: false
+          
+    RequestModel:
+      type: object
+      description: Request
+      allOf:
+        - $ref: '#/components/schemas/RequestDynamicProps'
+        - $ref: '#/components/schemas/RequestStaticProps'
+        - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        
+    RequestModelTwo:
+      type: object
+      description: Request
+      allOf:
+        - $ref: '#/components/schemas/RequestDynamicProps'
+        - $ref: '#/components/schemas/RequestStaticPropsTwo'
+        - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        request_type:
+          type: string
+          format: int64
+          description: request type
+          example: category_groceries
+        request_name:
+          type: string
+          format: int64
+          description: request name
+          example: kitchen
+        register_flag:
+          type: boolean
+          example: true
+  
+  
+  
+  
   
   
   
@@ -2844,6 +3062,35 @@ components:
                     description: price
                     example: 44
   
+    CreateRequestRequestBody:
+      description: request data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestModel'
+            
+    UpdateRequestRequestBody:
+      description: request data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/RequestModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  request_type:
+                    type: string
+                    format: int64
+                    description: category of request
+                    example: category_requests
+                  request_name:
+                    type: string
+                    format: int64
+                    description: request name
+                    example: toilet edited
+  
   
   
   
@@ -3368,6 +3615,53 @@ components:
                     format: int64
                     description: price
                     example: 44
+    
+    GetRequestsResponse:
+        description: Request lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - requests
+              - type: object
+              - properties:
+                  requests:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/RequestModel'
+                      - type: object
+                        $ref: '#/components/schemas/RequestModelTwo'
+    
+    GetRequestResponse:
+      description: Got request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/RequestModel'
+              
+    UpdateRequestResponse:
+      description: Updated request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/RequestModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  request_type:
+                    type: string
+                    format: int64
+                    description: category of request
+                    example: category_requests
+                  request_name:
+                    type: string
+                    format: int64
+                    description: request name
+                    example: toilet edited
     
     
     

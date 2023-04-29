@@ -34,25 +34,25 @@ servers:
         default: '443'
 
 tags:
-  - name: User
-    description: Access to user model.
+  - name: Request
+    description: Access to request model.
 
 paths:
-  /users:
+  /requests:
     post:
       tags:
-      - "User"
-      summary: CreateUser
-      operationId: createUser
+      - "Request"
+      summary: CreateRequest
+      operationId: createRequest
       requestBody:
-        $ref: '#/components/requestBodies/CreateUserRequestBody'
+        $ref: '#/components/requestBodies/CreateRequestRequestBody'
       responses:
         '200':
-          description: 作成済みユーザー
+          description: 作成済みリクエストー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserModel'
+                $ref: '#/components/schemas/RequestModel'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -63,13 +63,13 @@ paths:
   
     get:
       tags:
-      - "User"
-      summary: ユーザ一覧取得
-      description: ユーザー一覧
-      operationId: getUserList
+      - "Request"
+      summary: リクエスト覧取得
+      description: リクエストー一覧
+      operationId: getRequestList
       responses:
         '200':
-          $ref: '#/components/responses/GetUsersResponse'
+          $ref: '#/components/responses/GetRequestsResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -77,18 +77,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /users/{id}:
+  /requests/{id}:
     parameters:
-      - $ref: '#/components/parameters/UserIdParameter'
+      - $ref: '#/components/parameters/RequestIdParameter'
     get:
       tags:
-        - "User"
-      summary: GetUserById
+        - "Request"
+      summary: GetRequestById
       description: |-
-        Get user by id.
+        Get request by id.
       responses:
         '200':
-          $ref: '#/components/responses/GetUserResponse'
+          $ref: '#/components/responses/GetRequestResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -102,17 +102,17 @@ paths:
           
     patch:
       tags:
-        - "User"
-      summary: UpdateUserById
+        - "Request"
+      summary: UpdateRequestById
       description: |-
-        Update user by id.
+        Update request by id.
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/RequestIdParameter'
       requestBody:
-        $ref: '#/components/requestBodies/UpdateUserRequestBody'
+        $ref: '#/components/requestBodies/UpdateRequestRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateUserResponse'
+          $ref: '#/components/responses/UpdateRequestResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -126,15 +126,15 @@ paths:
   
     delete:
       tags:
-        - "User"
-      summary: DeleteUserById
+        - "Request"
+      summary: DeleteRequestById
       description: |-
-        Delete user by id.
+        Delete request by id.
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/RequestIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetUserResponse'
+          $ref: '#/components/responses/GetRequestResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -146,18 +146,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /users/{id}/edit:
+  /requests/{id}/edit:
     parameters:
-      - $ref: '#/components/parameters/UserIdParameter'
+      - $ref: '#/components/parameters/RequestIdParameter'
     get:
       tags:
-        - "User"
-      summary: EditUserById
+        - "Request"
+      summary: EditRequestById
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/RequestIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetUserResponse'
+          $ref: '#/components/responses/GetRequestResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -172,60 +172,46 @@ paths:
 components:
   schemas:
   #-------------------------------
-  # User schema
+  # Request schema
   #-------------------------------  
-    UserDynamicProps:
+    RequestDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
       properties:
-        user_id:
-          type: integer
-          format: int64
-          description: user id
-          example: 2
         request_type:
           type: string
           format: int64
-          description: category of product
-          example: category_products
+          description: category of request
+          example: category_requests
         request_name:
           type: string
           format: int64
           description: request name
           example: toilet
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
           
     
-    UserStaticProps:
+    RequestStaticProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
           type: integer
           format: int64
-          description: user id
+          description: request id
           example: 2
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
           
-    UserStaticPropsTwo:
+    RequestStaticPropsTwo:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
       properties:
         id:
           type: integer
           format: int64
-          description: user id
+          description: request id
           example: 3
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-02-23T13:33:28Z
           
     RequestRegisterFlagOption:
       type: object
@@ -234,57 +220,48 @@ components:
           type: boolean
           example: false
           
-    UserModel:
+    RequestModel:
       type: object
-      description: User
+      description: Request
       allOf:
-        - $ref: '#/components/schemas/UserDynamicProps'
-        - $ref: '#/components/schemas/UserStaticProps'
+        - $ref: '#/components/schemas/RequestDynamicProps'
+        - $ref: '#/components/schemas/RequestStaticProps'
         - $ref: '#/components/schemas/RequestRegisterFlagOption'
         
-    UserModelTwo:
+    RequestModelTwo:
       type: object
-      description: User
+      description: Request
       allOf:
-        - $ref: '#/components/schemas/UserDynamicProps'
-        - $ref: '#/components/schemas/UserStaticPropsTwo'
+        - $ref: '#/components/schemas/RequestDynamicProps'
+        - $ref: '#/components/schemas/RequestStaticPropsTwo'
         - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
       properties:
-        user_id:
-          type: integer
-          format: int64
-          description: user id
-          example: 2
         request_type:
           type: string
           format: int64
-          description: category of product
-          example: category_products
+          description: request type
+          example: category_groceries
         request_name:
           type: string
           format: int64
           description: request name
-          example: toilet
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-03-23T11:12:11Z
+          example: kitchen
         register_flag:
           type: boolean
           example: true
           
-    UserModels:
+    RequestModels:
       type: object
       properties:
-        users:
+        requests:
           type: array
           items:
             oneOf:
             - type: object
-              $ref: '#/components/schemas/UserModel'
+              $ref: '#/components/schemas/RequestModel'
             - type: object
-              $ref: '#/components/schemas/UserModelTwo'
+              $ref: '#/components/schemas/RequestModelTwo'
               
     
     ErrorModel:
@@ -307,10 +284,10 @@ components:
   # Reusable operation parameters
   #-------------------------------
   parameters:
-    UserIdParameter:
+    RequestIdParameter:
       name: id
       in: path
-      description: User id.
+      description: Request id.
       required: true
       schema:
         type: integer
@@ -320,43 +297,34 @@ components:
   # Reusable request body
   #-------------------------------  
   requestBodies:
-    CreateUserRequestBody:
-      description: user data
+    CreateRequestRequestBody:
+      description: request data
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UserModel'
+            $ref: '#/components/schemas/RequestModel'
             
-    UpdateUserRequestBody:
-      description: user data
+    UpdateRequestRequestBody:
+      description: request data
       required: true
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/RequestModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
-                  user_id:
-                    type: integer
-                    format: int64
-                    description: user id
-                    example: 4
                   request_type:
                     type: string
                     format: int64
-                    description: edit category of product
-                    example: edit category_products
+                    description: category of request
+                    example: category_requests
                   request_name:
                     type: string
                     format: int64
-                    description: edit request name
-                    example: edit toilet
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-04-24T14:34:44Z
+                    description: request name
+                    example: toilet edited
                       
     
 
@@ -365,56 +333,52 @@ components:
   # Reusable responses
   #-------------------------------
   responses:
-    GetUsersResponse:
-        description: User lists
+    GetRequestsResponse:
+        description: Request lists
         content:
           application/json:
             schema:
               allOf:
               - required:
-                - users
+                - requests
               - type: object
               - properties:
-                  users:
+                  requests:
                     type: array
                     items:
                       oneOf:
                       - type: object
-                        $ref: '#/components/schemas/UserModel'
+                        $ref: '#/components/schemas/RequestModel'
                       - type: object
-                        $ref: '#/components/schemas/UserModelTwo'
+                        $ref: '#/components/schemas/RequestModelTwo'
     
-    GetUserResponse:
-      description: Got user.
+    GetRequestResponse:
+      description: Got request.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/RequestModel'
               
-    UpdateUserResponse:
-      description: Updated user.
+    UpdateRequestResponse:
+      description: Updated request.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/RequestModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
-                  email:
+                  request_type:
                     type: string
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
+                    description: category of request
+                    example: category_requests
+                  request_name:
                     type: string
                     format: int64
-                    description: password
-                    example: passwordedited
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-03-21T17:32:28Z
+                    description: request name
+                    example: toilet edited
 
     
     BadRequestResponse:
