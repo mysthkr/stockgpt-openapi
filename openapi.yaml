@@ -44,6 +44,8 @@ tags:
     description: Access to grocery model.
   - name: Product
     description: Access to product model.
+  - name: CategoryGrocery
+    description: Access to category_grocery model.
     
     
     
@@ -707,6 +709,141 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   
+  /category_groceries:
+    post:
+      tags:
+      - "CategoryGrocery"
+      summary: CreateCategoryGrocery
+      operationId: createCategoryGrocery
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCategoryGroceryRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品カテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryGroceryModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "CategoryGrocery"
+      summary: 食料品カテゴリー一覧取得
+      description: 食料品カテゴリー一覧
+      operationId: getCategoryGroceryList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceriesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_groceries/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+    get:
+      tags:
+        - "CategoryGrocery"
+      summary: GetCategoryGroceryById
+      description: |-
+        Get category_grocery by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "CategoryGrocery"
+      summary: UpdateCategoryGroceryById
+      description: |-
+        Update category_grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCategoryGroceryRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCategoryGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "CategoryGrocery"
+      summary: DeleteCategoryGroceryById
+      description: |-
+        Delete category_grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_groceries/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+    get:
+      tags:
+        - "CategoryGrocery"
+      summary: EditCategoryGroceryById
+      parameters:
+        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+          
+          
+  
+  
   
   
   
@@ -1314,6 +1451,76 @@ components:
             - type: object
               $ref: '#/components/schemas/ProductModelTwo'
               
+  #-------------------------------
+  # CategoryGrocery schema
+  #-------------------------------  
+    CategoryGroceryDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+    
+    CategoryGroceryStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_grocery id
+          example: 2
+          
+    CategoryGroceryStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_grocery id
+          example: 3
+          
+    CategoryGroceryModel:
+      type: object
+      description: CategoryGrocery
+      allOf:
+        - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/CategoryGroceryStaticProps'
+        
+    CategoryGroceryModelTwo:
+      type: object
+      description: CategoryGrocery
+      allOf:
+        - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/CategoryGroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name two
+          
+    CategoryGroceryModels:
+      type: object
+      properties:
+        category_groceries:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/CategoryGroceryModel'
+            - type: object
+              $ref: '#/components/schemas/CategoryGroceryModelTwo'
+  
+  
   
   
           
@@ -1480,7 +1687,16 @@ components:
       schema:
         type: integer
       example: 2
-      
+    CategoryGroceryIdParameter:
+      name: id
+      in: path
+      description: CategoryGrocery id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+    
       
       
         
@@ -1657,6 +1873,29 @@ components:
                     description: item_id
                     example: 6
 
+    CreateCategoryGroceryRequestBody:
+      description: category_grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryGroceryModel'
+            
+    UpdateCategoryGroceryRequestBody:
+      description: category_grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test category name request
 
   
   
@@ -1945,6 +2184,49 @@ components:
                     format: int64
                     description: item_id
                     example: 6
+
+    GetCategoryGroceriesResponse:
+        description: CategoryGrocery lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - category_groceries
+              - type: object
+              - properties:
+                  category_groceries:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CategoryGroceryModel'
+                      - type: object
+                        $ref: '#/components/schemas/CategoryGroceryModelTwo'
+    
+    GetCategoryGroceryResponse:
+      description: Got category_grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryGroceryModel'
+              
+    UpdateCategoryGroceryResponse:
+      description: Updated category_grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryGroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test category name request
+
 
 
 
