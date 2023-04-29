@@ -238,6 +238,19 @@ components:
           format: int64
           description: item id
           example: 333
+          
+          
+    ItemModels:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/ItemModel'
+            - type: object
+              $ref: '#/components/schemas/ItemModelTwo'
               
     UpdateTimestamp:
       type: object

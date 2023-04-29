@@ -5,7 +5,7 @@ info:
   description: |-
     StockGPT API from Rails API.
   version: "1.0.0"
-  
+
 servers:
   - url: https://api.example.com/api/v1
     description: production
@@ -36,52 +36,39 @@ servers:
 tags:
   - name: User
     description: Access to user model.
+  - name: Item
+    description: Access to item model.
 
 paths:
   /users:
     post:
       tags:
       - "User"
-      security:
-        - bearer: []
       summary: CreateUser
-      description: |-
-        Create a user.
+      operationId: createUser
       requestBody:
         $ref: '#/components/requestBodies/CreateUserRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/CreateUserResponse'
+          description: 作成済みユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
           $ref: '#/components/responses/ForbiddenResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
     get:
       tags:
-        - "User"
-      security:
-        - bearer: []
-      summary: GetUsers
-      description: |-
-        Search for a users and get a list.
-      parameters:
-        - in: query
-          name: email
-          description: User mail address.
-          schema:
-            type: string
-            format: email
-          example: John@example.com
-        - in: query
-          name: name
-          description: User name.
-          schema:
-            type: string
-          example: John Smith
-        - $ref: '#/components/parameters/LimitParameter'
-        - $ref: '#/components/parameters/OffsetParameter'
+      - "User"
+      summary: ユーザ一覧取得
+      description: ユーザー一覧
+      operationId: getUserList
       responses:
         '200':
           $ref: '#/components/responses/GetUsersResponse'
@@ -91,29 +78,7 @@ paths:
           $ref: '#/components/responses/ForbiddenResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
-
-  /users/me:
-    get:
-      tags:
-        - "User"
-      summary: GetUserByMine
-      security:
-        - bearer: []
-      description: |-
-        Get user by logged in session.
-      responses:
-        '200':
-          $ref: '#/components/responses/GetUserResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '403':
-          $ref: '#/components/responses/ForbiddenResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '500':
-          $ref: '#/components/responses/InternalServerErrorResponse'
+          
   /users/{id}:
     parameters:
       - $ref: '#/components/parameters/UserIdParameter'
@@ -121,8 +86,6 @@ paths:
       tags:
         - "User"
       summary: GetUserById
-      security:
-        - bearer: []
       description: |-
         Get user by id.
       responses:
@@ -138,21 +101,20 @@ paths:
           $ref: '#/components/responses/NotFoundResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
-    put:
+          
+    patch:
       tags:
         - "User"
       summary: UpdateUserById
-      security:
-        - bearer: []
       description: |-
         Update user by id.
       parameters:
-        - $ref: '#/components/parameters/VersionParameter'
+        - $ref: '#/components/parameters/UserIdParameter'
       requestBody:
         $ref: '#/components/requestBodies/UpdateUserRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/CreateUserResponse'
+          $ref: '#/components/responses/UpdateUserResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -163,19 +125,18 @@ paths:
           $ref: '#/components/responses/ConflictErrorResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
+  
     delete:
       tags:
         - "User"
       summary: DeleteUserById
-      security:
-        - bearer: []
       description: |-
         Delete user by id.
       parameters:
-        - $ref: '#/components/parameters/VersionParameter'
+        - $ref: '#/components/parameters/UserIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/CreateUserResponse'
+          $ref: '#/components/responses/GetUserResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -186,114 +147,264 @@ paths:
           $ref: '#/components/responses/ConflictErrorResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /users/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/UserIdParameter'
+    get:
+      tags:
+        - "User"
+      summary: EditUserById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /items:
+    post:
+      tags:
+      - "Item"
+      summary: CreateItem
+      operationId: createItem
+      requestBody:
+        $ref: '#/components/requestBodies/CreateItemRequestBody'
+      responses:
+        '200':
+          description: 作成済み商品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Item"
+      summary: 商品一覧取得
+      description: 商品一覧
+      operationId: getItemList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /items/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ItemIdParameter'
+    get:
+      tags:
+        - "Item"
+      summary: GetItemById
+      description: |-
+        Get item by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Item"
+      summary: UpdateItemById
+      description: |-
+        Update item by id.
+      parameters:
+        - $ref: '#/components/parameters/ItemIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateItemRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Item"
+      summary: DeleteItemById
+      description: |-
+        Delete item by id.
+      parameters:
+        - $ref: '#/components/parameters/ItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /items/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ItemIdParameter'
+    get:
+      tags:
+        - "Item"
+      summary: EditItemById
+      parameters:
+        - $ref: '#/components/parameters/ItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
 
 components:
-  #-------------------------------
-  # Reusable schemas
-  #-------------------------------
   schemas:
-    UserModel:
-      description: User model
-      required:
-        - id
-        - name
-        - email
+  #-------------------------------
+  # User schema
+  #-------------------------------  
+    UserDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        email:
+          type: string
+          format: int64
+          description: mail address
+          example: test@gmail.com
+        encrypted_password:
+          type: string
+          format: int64
+          description: password
+          example: password
+          
+    
+    UserStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
-          title: User id
-          type: string
-          example: 2c6e239a-f02b-d158-2833-c7f883bb5530
-          readOnly: true
-        name:
-          title: User name
-          type: string
-          example: Leanne Graham
+          type: integer
+          format: int64
+          description: user id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+          
+    UserStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: user id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 3
+          
+    UserAdminOption:
+      type: object
+      properties:
+        admin:
+          type: boolean
+          example: true
+          
+    UserBusinessOption:
+      type: object
+      properties:
+        business:
+          type: boolean
+          example: false
+          
+    UserModel:
+      type: object
+      description: User
+      allOf:
+        - $ref: '#/components/schemas/UserDynamicProps'
+        - $ref: '#/components/schemas/UserStaticProps'
+        - $ref: '#/components/schemas/UserAdminOption'
+        - $ref: '#/components/schemas/UserBusinessOption'
+        
+    UserModelTwo:
+      type: object
+      description: User
+      allOf:
+        - $ref: '#/components/schemas/UserDynamicProps'
+        - $ref: '#/components/schemas/UserStaticPropsTwo'
+        - $ref: '#/components/schemas/UserAdminOption'
+        - $ref: '#/components/schemas/UserBusinessOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
         email:
-          title: Mail address
           type: string
-          example: Sincere@april.biz
-        address:
-          title: User address
-          type: object
-          properties:
-            street:
-              title: User address of street
-              type: string
-              example: Kulas Light
-            suite:
-              title: User address of suite
-              type: string
-              example: Apt. 556
-            city:
-              title: User address of city
-              type: string
-              example: Gwenborough
-            zipcode:
-              title: User address of zipcode
-              type: string
-              example: 92998-3874
-        hobbies:
-          title: User hobbies
-          type: array
-          items:
-            type: string
-            enum: 
-              - Reading books
-              - Blogging
-              - Singing
-              - Listening to music
-              - Learning new languages
-              - Shopping
-              - Dancing
-              - Drawing
-              - Traveling
-              - Cooking
-            example:
-              - Shopping
-              - Cooking
-
-    TimeStampsModel:
-      description: TimeStamps Model
-      required:
-        - createAt
-        - version
-      type: object
-      properties:
-        createAt:
-          title: Created datetime.
+          format: int64
+          description: mail address
+          example: test2@gmail.com
+        encrypted_password:
           type: string
-          format: date-time
-          example: 2017-07-21T17:32:28Z
-        updateAt:
-          title: Updated datetime.
-          type: string
-          format: date-time
-          example: 2020-09-12T01:41:23Z
-        version:
-          title: Optimistic lock key.
-          type: integer
-          minimum: 1
-          default: 1
-
-    PaginationModel:
-      description: Pagination model
-      required:
-        - page
-        - total
-      type: object
-      properties:
-        page:
-          title: Page number.
-          type: integer
-          minimum: 1
-          example: 1
-        total:
-          title: Total count.
-          type: integer
-          minimum: 0
-          example: 10
-
+          format: int64
+          description: password
+          example: password2
+        admin:
+          type: boolean
+          example: false
+              
+    
     ErrorModel:
       description: Response Error Model.
       required:
@@ -309,52 +420,145 @@ components:
           title: error message
           type: string
           example: Internal Server Error.
+                
+  #-------------------------------
+  # Item schema
+  #-------------------------------  
+    ItemDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Egg
+        criteria:
+          type: integer
+          format: int64
+          description: item id
+          example: 22
           
+    
+    ItemStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: item id
+          example: 2
+          
+    ItemStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: item id
+          example: 3
+          
+    ItemModel:
+      type: object
+      description: Item
+      allOf:
+        - $ref: '#/components/schemas/ItemDynamicProps'
+        - $ref: '#/components/schemas/ItemStaticProps'
+        
+    ItemModelTwo:
+      type: object
+      description: Item
+      allOf:
+        - $ref: '#/components/schemas/ItemDynamicProps'
+        - $ref: '#/components/schemas/ItemStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Miso
+        criteria:
+          type: integer
+          format: int64
+          description: item id
+          example: 333
+              
+    UpdateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-02-22T22:22:22Z
+          
+    CreateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-02-22T22:22:22Z
+          
+    EditUpdateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-04-04T04:04:04Z
+    
+    SecondUpdateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-03T03:03:03Z
+    
+    SecondCreateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-03T03:03:03Z
+    
+                
   #-------------------------------
   # Reusable operation parameters
   #-------------------------------
   parameters:
     UserIdParameter:
+        name: id
+        in: path
+        description: User id.
+        required: true
+        schema:
+          type: integer
+        example: 2
+    ItemIdParameter:
       name: id
       in: path
-      description: User id.
+      description: Item id.
       required: true
       schema:
-        type: string
-        format: uuid4
-      example: cfe43609-4c38-d52d-44ff-66bf2bc2d5c2
+        type: integer
+      example: 2
     
-    VersionParameter:
-      name: version
-      in: query
-      description: Optimistic lock key.
-      required: true
-      schema:
-        type: integer
-        default: 1
-      example: 1
-
-    LimitParameter:
-      name: limit
-      in: query
-      description: Limit one page.
-      schema:
-        type: integer
-        default: 20
-      example: 20
-
-    OffsetParameter:
-      name: offset
-      in: query
-      description: Offset page.
-      schema:
-        type: integer
-        default: 0
-      example: 100
-
   #-------------------------------
   # Reusable request body
-  #-------------------------------
+  #-------------------------------  
   requestBodies:
     CreateUserRequestBody:
       description: user data
@@ -363,7 +567,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UserModel'
-
+            
     UpdateUserRequestBody:
       description: user data
       required: true
@@ -371,79 +575,149 @@ components:
         application/json:
           schema:
             allOf:
-            - $ref: '#/components/schemas/UserModel'
-            - properties:
-                email:
-                  readOnly: true
+              - $ref: '#/components/schemas/UserDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+  
+    CreateItemRequestBody:
+      description: item data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ItemModel'
+            
+    UpdateItemRequestBody:
+      description: item data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ItemModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: category of product
+                    example: Beef
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: item id
+                    example: 4
+
 
   #-------------------------------
   # Reusable responses
   #-------------------------------
   responses:
     GetUsersResponse:
-      description: User lists
-      content:
-        application/json:
-          schema:
-            allOf:
-            - $ref: '#/components/schemas/PaginationModel'
-            - required:
-              - users
-            - type: object
-            - properties:
-                users:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/UserModel'
-                  example:
-                    - id: 2c6e239a-f02b-d158-2833-c7f883bb5530
-                      name: Leanne Graham
-                      email: Sincere@april.biz
-                      address: 
-                        street: Kulas Light
-                        suite: Apt. 556
-                        city: Gwenborough
-                        zipcode: 92998-3874
-                      hobbies: 
-                        - Shopping
-                        - Cooking
-                      createAt: 2020-09-12T01:41:23.000Z
-                      update_at: 2020-09-12T01:41:23.000Z
-                      version: 2
-                    - id: 65fe854a-ca6d-2caa-1b12-e0b8d8b0c563
-                      name: Clementine Bauch
-                      email: Nathan@yesenia.net
-                      createAt: 2020-09-12T01:41:23.000Z
-                      version: 1
-                    - id: 36c1ee69-9e35-0740-990d-2b97508bd9fb
-                      name: Ervin Howell
-                      email: yamada@example.com
-                      hobbies:
-                        - Singing
-                        - Dancing
-                        - Drawing
-                      createAt: 2020-09-12T01:41:23.000Z
-                      update_at: 2020-09-12T01:41:23.000Z
-                      version: 3
-
+        description: User lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - users
+              - type: object
+              - properties:
+                  users:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/UserModel'
+                      - type: object
+                        $ref: '#/components/schemas/UserModelTwo'
+    
     GetUserResponse:
       description: Got user.
       content:
         application/json:
           schema:
             allOf:
-            - $ref: '#/components/schemas/UserModel'
-            - $ref: '#/components/schemas/TimeStampsModel'
-
-    CreateUserResponse:
-      description: Created user.
+              - $ref: '#/components/schemas/UserModel'
+              
+    UpdateUserResponse:
+      description: Updated user.
       content:
         application/json:
           schema:
             allOf:
-            - $ref: '#/components/schemas/UserModel'
-            - $ref: '#/components/schemas/TimeStampsModel'
+              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                    
+    GetItemsResponse:
+        description: Item lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - items
+              - type: object
+              - properties:
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ItemModel'
+                      - type: object
+                        $ref: '#/components/schemas/ItemModelTwo'
+    
+    GetItemResponse:
+      description: Got item.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ItemModel'
+              
+    UpdateItemResponse:
+      description: Updated item.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ItemModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: category of product
+                    example: Beef
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: item id
+                    example: 4
 
+    
     BadRequestResponse:
       description: | 
         Bad Request.
@@ -457,7 +731,7 @@ components:
                 example: 400
               message:
                 example: Bad Request.
-
+                
     UnauthorizedResponse:
       description: | 
         Unauthorized.
@@ -471,7 +745,7 @@ components:
                 example: 401
               message:
                 example: Unauthorized.
-
+                
     ForbiddenResponse:
       description: | 
         Forbidden.
@@ -485,7 +759,7 @@ components:
                 example: 403
               message:
                 example: Forbidden.
-
+                
     NotFoundResponse:
       description: | 
         Not Found.
@@ -499,7 +773,7 @@ components:
                 example: 404
               message:
                 example: Not Found.
-
+                
     ConflictErrorResponse:
       description: | 
         Conflict.
@@ -513,7 +787,6 @@ components:
                 example: 409
               message:
                 example: Conflict.
-
     InternalServerErrorResponse:
       description: |-
         Internal Server Error.
@@ -521,21 +794,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorModel'
-
-  #-------------------------------
-  # Reusable security
-  #-------------------------------
-  securitySchemes:
-    bearer:
-      type: http
-      scheme: bearer
-      description: JWT Token Authentication
-    apikey:
-      type: apiKey
-      name: x-api-key
-      in: header
-      description: API Key Authentication
-    basicAuth:
-      type: http
-      scheme: basic
-      description: Basic Authentication
+          
+          
+          
