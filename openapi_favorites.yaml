@@ -1,0 +1,467 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Favorite
+    description: Access to favorite model.
+
+paths:
+  /favorites:
+    post:
+      tags:
+      - "Favorite"
+      summary: CreateFavorite
+      operationId: createFavorite
+      requestBody:
+        $ref: '#/components/requestBodies/CreateFavoriteRequestBody'
+      responses:
+        '200':
+          description: 作成済みお気に入り
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Favorite"
+      summary: お気に入り一覧取得
+      description: お気に入り一覧
+      operationId: getFavoriteList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFavoritesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /favorites/{id}:
+    parameters:
+      - $ref: '#/components/parameters/FavoriteIdParameter'
+    get:
+      tags:
+        - "Favorite"
+      summary: GetFavoriteById
+      description: |-
+        Get favorite by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFavoriteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Favorite"
+      summary: UpdateFavoriteById
+      description: |-
+        Update favorite by id.
+      parameters:
+        - $ref: '#/components/parameters/FavoriteIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateFavoriteRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateFavoriteResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Favorite"
+      summary: DeleteFavoriteById
+      description: |-
+        Delete favorite by id.
+      parameters:
+        - $ref: '#/components/parameters/FavoriteIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFavoriteResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /favorites/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/FavoriteIdParameter'
+    get:
+      tags:
+        - "Favorite"
+      summary: EditFavoriteById
+      parameters:
+        - $ref: '#/components/parameters/FavoriteIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFavoriteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Favorite schema
+  #-------------------------------  
+    FavoriteDynamicProps:
+      type: object
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item id
+          example: 2
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    FavoriteStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: favorite id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    FavoriteStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: favorite id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    FavoriteModel:
+      type: object
+      description: Favorite
+      allOf:
+        - $ref: '#/components/schemas/FavoriteDynamicProps'
+        - $ref: '#/components/schemas/FavoriteStaticProps'
+        
+    FavoriteModelTwo:
+      type: object
+      description: Favorite
+      allOf:
+        - $ref: '#/components/schemas/FavoriteDynamicProps'
+        - $ref: '#/components/schemas/FavoriteStaticPropsTwo'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item id
+          example: 3
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-21T17:32:28Z
+          
+          
+    FavoriteModels:
+      type: object
+      properties:
+        favorites:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/FavoriteModel'
+            - type: object
+              $ref: '#/components/schemas/FavoriteModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    FavoriteIdParameter:
+      name: id
+      in: path
+      description: Favorite id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateFavoriteRequestBody:
+      description: favorite data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FavoriteModel'
+            
+    UpdateFavoriteRequestBody:
+      description: favorite data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/FavoriteModel'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item id
+                    example: 4
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-04-21T17:32:28Z
+                        
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetFavoritesResponse:
+        description: Favorite lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - favorites
+              - type: object
+              - properties:
+                  favorites:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/FavoriteModel'
+                      - type: object
+                        $ref: '#/components/schemas/FavoriteModelTwo'
+    
+    GetFavoriteResponse:
+      description: Got favorite.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/FavoriteModel'
+              
+    UpdateFavoriteResponse:
+      description: Updated favorite.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/FavoriteModel'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
