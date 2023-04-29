@@ -176,21 +176,20 @@ components:
   #-------------------------------  
     InvitationDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
       properties:
         user_id:
           type: integer
           format: int64
           description: invitation id
           example: 2
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
           
     
     InvitationStaticProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
           type: integer
@@ -202,14 +201,11 @@ components:
           format: int64
           description: invitation id
           example: 2
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
           
     InvitationStaticPropsTwo:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
       properties:
         id:
           type: integer
@@ -221,11 +217,6 @@ components:
           format: int64
           description: invitation id
           example: 3
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
           
     InvitationModel:
       type: object
@@ -240,17 +231,13 @@ components:
       allOf:
         - $ref: '#/components/schemas/InvitationDynamicProps'
         - $ref: '#/components/schemas/InvitationStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
       properties:
         user_id:
           type: integer
           format: int64
           description: invitation id
           example: 3
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-03-21T17:32:28Z
           
           
     InvitationModels:
@@ -315,19 +302,14 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/InvitationModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   user_id:
                     type: integer
                     format: int64
                     description: invitation id
                     example: 4
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-04-21T17:32:28Z
-                      
-    
+
 
 
   #-------------------------------
@@ -368,17 +350,13 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/InvitationModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   user_id:
                     type: integer
                     format: int64
                     description: invitation id
                     example: 4
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-04-21T17:32:28Z
 
     
     BadRequestResponse:
