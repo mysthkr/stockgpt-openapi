@@ -62,6 +62,12 @@ tags:
     description: Access to cart model.
   - name: Maker
     description: Access to maker model.
+  - name: Criteria
+    description: Access to criteria model.
+  - name: Shop
+    description: Access to shop model.
+    
+    
     
     
   - name: Item
@@ -1903,6 +1909,267 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   
+  /criterias:
+    post:
+      tags:
+      - "Criteria"
+      summary: CreateCriteria
+      operationId: createCriteria
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCriteriaRequestBody'
+      responses:
+        '200':
+          description: 作成済み使用基準日
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CriteriaModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Criteria"
+      summary: 使用基準日一覧取得
+      description: 使用基準日一覧
+      operationId: getCriteriaList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriasResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /criterias/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CriteriaIdParameter'
+    get:
+      tags:
+        - "Criteria"
+      summary: GetCriteriaById
+      description: |-
+        Get criteria by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Criteria"
+      summary: UpdateCriteriaById
+      description: |-
+        Update criteria by id.
+      parameters:
+        - $ref: '#/components/parameters/CriteriaIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCriteriaRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCriteriaResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Criteria"
+      summary: DeleteCriteriaById
+      description: |-
+        Delete criteria by id.
+      parameters:
+        - $ref: '#/components/parameters/CriteriaIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriaResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /criterias/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CriteriaIdParameter'
+    get:
+      tags:
+        - "Criteria"
+      summary: EditCriteriaById
+      parameters:
+        - $ref: '#/components/parameters/CriteriaIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /shops:
+    post:
+      tags:
+      - "Shop"
+      summary: CreateShop
+      operationId: createShop
+      requestBody:
+        $ref: '#/components/requestBodies/CreateShopRequestBody'
+      responses:
+        '200':
+          description: 作成済み店舗
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Shop"
+      summary: 店舗一覧取得
+      description: 店舗一覧
+      operationId: getShopList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /shops/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ShopIdParameter'
+    get:
+      tags:
+        - "Shop"
+      summary: GetShopById
+      description: |-
+        Get shop by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Shop"
+      summary: UpdateShopById
+      description: |-
+        Update shop by id.
+      parameters:
+        - $ref: '#/components/parameters/ShopIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateShopRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateShopResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Shop"
+      summary: DeleteShopById
+      description: |-
+        Delete shop by id.
+      parameters:
+        - $ref: '#/components/parameters/ShopIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /shops/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ShopIdParameter'
+    get:
+      tags:
+        - "Shop"
+      summary: EditShopById
+      parameters:
+        - $ref: '#/components/parameters/ShopIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
   
   
   
@@ -3169,6 +3436,151 @@ components:
           description: criteria
           example: kaou
   
+  #-------------------------------
+  # Criteria schema
+  #-------------------------------  
+    CriteriaDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        group_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        item_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        criteria:
+          type: integer
+          format: int64
+          description: category of product
+          example: 22
+          
+    
+    CriteriaStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+          
+    CriteriaStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+          
+    CriteriaModel:
+      type: object
+      description: Criteria
+      allOf:
+        - $ref: '#/components/schemas/CriteriaDynamicProps'
+        - $ref: '#/components/schemas/CriteriaStaticProps'
+        
+    CriteriaModelTwo:
+      type: object
+      description: Criteria
+      allOf:
+        - $ref: '#/components/schemas/CriteriaDynamicProps'
+        - $ref: '#/components/schemas/CriteriaStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        group_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        item_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        criteria:
+          type: integer
+          format: int64
+          description: category of product
+          example: 33
+  
+  #-------------------------------
+  # Shop schema
+  #-------------------------------  
+    ShopDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Seven Eleven
+        prefecture:
+          type: string
+          format: int64
+          description:  prefecture name
+          example: Hokkaido
+          
+    
+    ShopStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: shop id
+          example: 2
+          
+    ShopStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: shop id
+          example: 3
+          
+    ShopModel:
+      type: object
+      description: Shop
+      allOf:
+        - $ref: '#/components/schemas/ShopDynamicProps'
+        - $ref: '#/components/schemas/ShopStaticProps'
+        
+    ShopModelTwo:
+      type: object
+      description: Shop
+      allOf:
+        - $ref: '#/components/schemas/ShopDynamicProps'
+        - $ref: '#/components/schemas/ShopStaticPropsTwo'
+        - $ref: '#/components/schemas/EditUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Family Mart
+        prefecture:
+          type: string
+          format: int64
+          description:  prefecture name
+          example: Okinawa
   
   
   
@@ -3416,7 +3828,24 @@ components:
       schema:
         type: integer
       example: 2
-    
+    CriteriaIdParameter:
+      name: id
+      in: path
+      description: Criteria id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    ShopIdParameter:
+      name: id
+      in: path
+      description: Shop id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+      
+      
     
     
     
@@ -3842,6 +4271,71 @@ components:
                     format: int64
                     description: criteria
                     example: edit kaou
+    
+    CreateCriteriaRequestBody:
+      description: criteria data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CriteriaModel'
+            
+    UpdateCriteriaRequestBody:
+      description: criteria data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CriteriaModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  group_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: category of product
+                    example: 55
+    
+    CreateShopRequestBody:
+      description: shop data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShopModel'
+            
+    UpdateShopRequestBody:
+      description: shop data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ShopModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: category of product
+                    example: Lawson
+                  prefecture:
+                    type: string
+                    format: int64
+                    description:  prefecture name
+                    example: Akita
+  
+  
   
   
   
@@ -4543,7 +5037,108 @@ components:
                     description: criteria
                     example: edit kaou
     
+    GetCriteriasResponse:
+        description: Criteria lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - criterias
+              - type: object
+              - properties:
+                  criterias:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CriteriaModel'
+                      - type: object
+                        $ref: '#/components/schemas/CriteriaModelTwo'
     
+    GetCriteriaResponse:
+      description: Got criteria.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CriteriaModel'
+              
+    UpdateCriteriaResponse:
+      description: Updated criteria.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CriteriaModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  group_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 55
+    
+    GetShopsResponse:
+        description: Shop lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - shops
+              - type: object
+              - properties:
+                  shops:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ShopModel'
+                      - type: object
+                        $ref: '#/components/schemas/ShopModelTwo'
+    
+    GetShopResponse:
+      description: Got shop.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ShopModel'
+              
+    UpdateShopResponse:
+      description: Updated shop.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ShopModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: category of product
+                    example: Lawson
+                  prefecture:
+                    type: string
+                    format: int64
+                    description:  prefecture name
+                    example: Akita
+    
+                    
+                    
+                    
     
     
     
