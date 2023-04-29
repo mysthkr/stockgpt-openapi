@@ -40,6 +40,9 @@ tags:
     description: Access to profile model.
   - name: Group
     description: Access to group model.
+  - name: Grocery
+    description: Access to grocery model.
+    
     
     
     
@@ -439,6 +442,142 @@ paths:
           $ref: '#/components/responses/NotFoundResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  
+  /groceries:
+    post:
+      tags:
+      - "Grocery"
+      summary: CreateGrocery
+      operationId: createGrocery
+      requestBody:
+        $ref: '#/components/requestBodies/CreateGroceryRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Grocery"
+      summary: 食料品一覧取得
+      description: 食料品一覧
+      operationId: getGroceryList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGrocerysResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /groceries/{id}:
+    parameters:
+      - $ref: '#/components/parameters/GroceryIdParameter'
+    get:
+      tags:
+        - "Grocery"
+      summary: GetGroceryById
+      description: |-
+        Get grocery by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Grocery"
+      summary: UpdateGroceryById
+      description: |-
+        Update grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroceryRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Grocery"
+      summary: DeleteGroceryById
+      description: |-
+        Delete grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /groceries/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/GroceryIdParameter'
+    get:
+      tags:
+        - "Grocery"
+      summary: EditGroceryById
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+  
+  
+  
   
   
   
@@ -848,7 +987,96 @@ components:
           description: name
           example: testnametwo
           
+  #-------------------------------
+  # Grocery schema
+  #-------------------------------  
+    GroceryDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+    
+    GroceryStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: grocery id
+          example: 2
           
+    GroceryStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: grocery id
+          example: 3
+          
+    GroceryModel:
+      type: object
+      description: Grocery
+      allOf:
+        - $ref: '#/components/schemas/GroceryDynamicProps'
+        - $ref: '#/components/schemas/GroceryStaticProps'
+        
+    GroceryModelTwo:
+      type: object
+      description: Grocery
+      allOf:
+        - $ref: '#/components/schemas/GroceryDynamicProps'
+        - $ref: '#/components/schemas/GroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+          
+    GroceryModels:
+      type: object
+      properties:
+        grocerys:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/GroceryModel'
+            - type: object
+              $ref: '#/components/schemas/GroceryModelTwo'
+              
+              
           
                 
                 
@@ -997,6 +1225,14 @@ components:
       schema:
         type: integer
       example: 2
+    GroceryIdParameter:
+      name: id
+      in: path
+      description: Grocery id.
+      required: true
+      schema:
+        type: integer
+      example: 2
       
       
       
@@ -1106,8 +1342,42 @@ components:
                     description: name
                     example: edited testname
                     
+    CreateGroceryRequestBody:
+      description: grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GroceryModel'
+            
+    UpdateGroceryRequestBody:
+      description: grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4                
                     
-                    
+
+
   
     CreateItemRequestBody:
       description: item data
@@ -1289,7 +1559,57 @@ components:
                     description: name
                     example: edited testname
     
+    GetGrocerysResponse:
+        description: Grocery lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - grocerys
+              - type: object
+              - properties:
+                  grocerys:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/GroceryModel'
+                      - type: object
+                        $ref: '#/components/schemas/GroceryModelTwo'
     
+    GetGroceryResponse:
+      description: Got grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              
+    UpdateGroceryResponse:
+      description: Updated grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
     
     
     
