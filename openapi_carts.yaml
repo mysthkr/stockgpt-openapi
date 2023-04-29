@@ -1,0 +1,502 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Cart
+    description: Access to cart model.
+
+paths:
+  /carts:
+    post:
+      tags:
+      - "Cart"
+      summary: CreateCart
+      operationId: createCart
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCartRequestBody'
+      responses:
+        '200':
+          description: 作成済みカート
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Cart"
+      summary: カート一覧取得
+      description: カート一覧
+      operationId: getCartList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /carts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CartIdParameter'
+    get:
+      tags:
+        - "Cart"
+      summary: GetCartById
+      description: |-
+        Get cart by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Cart"
+      summary: UpdateCartById
+      description: |-
+        Update cart by id.
+      parameters:
+        - $ref: '#/components/parameters/CartIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCartRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCartResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Cart"
+      summary: DeleteCartById
+      description: |-
+        Delete cart by id.
+      parameters:
+        - $ref: '#/components/parameters/CartIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /carts/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CartIdParameter'
+    get:
+      tags:
+        - "Cart"
+      summary: EditCartById
+      parameters:
+        - $ref: '#/components/parameters/CartIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Cart schema
+  #-------------------------------  
+    CartDynamicProps:
+      type: object
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria
+          example: 2
+        price:
+          type: integer
+          format: int64
+          description: criteria
+          example: 222
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    CartStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 2
+        item_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    CartStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 3
+        item_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-02-23T17:32:28Z
+          
+    RequestDeletedOption:
+      type: object
+      properties:
+        deleted_at:
+          type: string
+          format: int64
+          description: deleted datetime
+          example: 2023-04-24T14:34:56Z
+          
+    CartModel:
+      type: object
+      description: Cart
+      allOf:
+        - $ref: '#/components/schemas/CartDynamicProps'
+        - $ref: '#/components/schemas/CartStaticProps'
+        - $ref: '#/components/schemas/RequestDeletedOption'
+        
+    CartModelTwo:
+      type: object
+      description: Cart
+      allOf:
+        - $ref: '#/components/schemas/CartDynamicProps'
+        - $ref: '#/components/schemas/CartStaticPropsTwo'
+        - $ref: '#/components/schemas/RequestDeletedOption'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria
+          example: 3
+        price:
+          type: integer
+          format: int64
+          description: criteria
+          example: 333
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-23T13:32:28Z
+          
+    CartModels:
+      type: object
+      properties:
+        carts:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/CartModel'
+            - type: object
+              $ref: '#/components/schemas/CartModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    CartIdParameter:
+      name: id
+      in: path
+      description: Cart id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateCartRequestBody:
+      description: cart data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CartModel'
+            
+    UpdateCartRequestBody:
+      description: cart data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CartModel'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5
+                  price:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5555
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-23T13:32:28Z
+
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetCartsResponse:
+        description: Cart lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - carts
+              - type: object
+              - properties:
+                  carts:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CartModel'
+                      - type: object
+                        $ref: '#/components/schemas/CartModelTwo'
+    
+    GetCartResponse:
+      description: Got cart.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CartModel'
+              
+    UpdateCartResponse:
+      description: Updated cart.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CartModel'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
