@@ -1,0 +1,462 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Invitation
+    description: Access to invitation model.
+
+paths:
+  /invitations:
+    post:
+      tags:
+      - "Invitation"
+      summary: CreateInvitation
+      operationId: createInvitation
+      requestBody:
+        $ref: '#/components/requestBodies/CreateInvitationRequestBody'
+      responses:
+        '200':
+          description: 作成済みグループ招待
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitationModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Invitation"
+      summary: グループ招待一覧取得
+      description: グループ招待一覧
+      operationId: getInvitationList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetInvitationsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /invitations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/InvitationIdParameter'
+    get:
+      tags:
+        - "Invitation"
+      summary: GetInvitationById
+      description: |-
+        Get invitation by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetInvitationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Invitation"
+      summary: UpdateInvitationById
+      description: |-
+        Update invitation by id.
+      parameters:
+        - $ref: '#/components/parameters/InvitationIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateInvitationRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateInvitationResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Invitation"
+      summary: DeleteInvitationById
+      description: |-
+        Delete invitation by id.
+      parameters:
+        - $ref: '#/components/parameters/InvitationIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetInvitationResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /invitations/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/InvitationIdParameter'
+    get:
+      tags:
+        - "Invitation"
+      summary: EditInvitationById
+      parameters:
+        - $ref: '#/components/parameters/InvitationIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetInvitationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Invitation schema
+  #-------------------------------  
+    InvitationDynamicProps:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+          description: invitation id
+          example: 2
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    InvitationStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: invitation id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: invitation id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    InvitationStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: invitation id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: invitation id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    InvitationModel:
+      type: object
+      description: Invitation
+      allOf:
+        - $ref: '#/components/schemas/InvitationDynamicProps'
+        - $ref: '#/components/schemas/InvitationStaticProps'
+        
+    InvitationModelTwo:
+      type: object
+      description: Invitation
+      allOf:
+        - $ref: '#/components/schemas/InvitationDynamicProps'
+        - $ref: '#/components/schemas/InvitationStaticPropsTwo'
+      properties:
+        user_id:
+          type: integer
+          format: int64
+          description: invitation id
+          example: 3
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-21T17:32:28Z
+          
+          
+    InvitationModels:
+      type: object
+      properties:
+        invitations:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/InvitationModel'
+            - type: object
+              $ref: '#/components/schemas/InvitationModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    InvitationIdParameter:
+      name: id
+      in: path
+      description: Invitation id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateInvitationRequestBody:
+      description: invitation data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InvitationModel'
+            
+    UpdateInvitationRequestBody:
+      description: invitation data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/InvitationModel'
+              - properties:
+                  user_id:
+                    type: integer
+                    format: int64
+                    description: invitation id
+                    example: 4
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-04-21T17:32:28Z
+                      
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetInvitationsResponse:
+        description: Invitation lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - invitations
+              - type: object
+              - properties:
+                  invitations:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/InvitationModel'
+                      - type: object
+                        $ref: '#/components/schemas/InvitationModelTwo'
+    
+    GetInvitationResponse:
+      description: Got invitation.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/InvitationModel'
+              
+    UpdateInvitationResponse:
+      description: Updated invitation.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/InvitationModel'
+              - properties:
+                  user_id:
+                    type: integer
+                    format: int64
+                    description: invitation id
+                    example: 4
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-04-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
