@@ -176,6 +176,8 @@ components:
   #-------------------------------  
     CartDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
       properties:
         criteria:
           type: integer
@@ -187,15 +189,12 @@ components:
           format: int64
           description: criteria
           example: 222
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
           
     
     CartStaticProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
           type: integer
@@ -212,14 +211,11 @@ components:
           format: int64
           description: cart id
           example: 2
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
           
     CartStaticPropsTwo:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
       properties:
         id:
           type: integer
@@ -236,11 +232,6 @@ components:
           format: int64
           description: cart id
           example: 3
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-02-23T17:32:28Z
           
     RequestDeletedOption:
       type: object
@@ -266,6 +257,7 @@ components:
         - $ref: '#/components/schemas/CartDynamicProps'
         - $ref: '#/components/schemas/CartStaticPropsTwo'
         - $ref: '#/components/schemas/RequestDeletedOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
       properties:
         criteria:
           type: integer
@@ -277,11 +269,6 @@ components:
           format: int64
           description: criteria
           example: 333
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-03-23T13:32:28Z
           
     CartModels:
       type: object
@@ -345,6 +332,7 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/CartModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   criteria:
                     type: integer
@@ -356,11 +344,6 @@ components:
                     format: int64
                     description: criteria
                     example: 5555
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-03-23T13:32:28Z
 
     
 
@@ -403,22 +386,18 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/CartModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
-                  email:
-                    type: string
+                  criteria:
+                    type: integer
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
-                    type: string
+                    description: criteria
+                    example: 5
+                  price:
+                    type: integer
                     format: int64
-                    description: password
-                    example: passwordedited
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-03-21T17:32:28Z
+                    description: criteria
+                    example: 5555
 
     
     BadRequestResponse:
