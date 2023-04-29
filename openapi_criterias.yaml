@@ -1,0 +1,486 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Criteria
+    description: Access to criteria model.
+
+paths:
+  /criterias:
+    post:
+      tags:
+      - "Criteria"
+      summary: CreateCriteria
+      operationId: createCriteria
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCriteriaRequestBody'
+      responses:
+        '200':
+          description: 作成済み使用基準日
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CriteriaModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Criteria"
+      summary: 使用基準日一覧取得
+      description: 使用基準日一覧
+      operationId: getCriteriaList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriasResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /criterias/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CriteriaIdParameter'
+    get:
+      tags:
+        - "Criteria"
+      summary: GetCriteriaById
+      description: |-
+        Get criteria by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Criteria"
+      summary: UpdateCriteriaById
+      description: |-
+        Update criteria by id.
+      parameters:
+        - $ref: '#/components/parameters/CriteriaIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCriteriaRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCriteriaResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Criteria"
+      summary: DeleteCriteriaById
+      description: |-
+        Delete criteria by id.
+      parameters:
+        - $ref: '#/components/parameters/CriteriaIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriaResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /criterias/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CriteriaIdParameter'
+    get:
+      tags:
+        - "Criteria"
+      summary: EditCriteriaById
+      parameters:
+        - $ref: '#/components/parameters/CriteriaIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCriteriaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Criteria schema
+  #-------------------------------  
+    CriteriaDynamicProps:
+      type: object
+      properties:
+        group_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        item_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        criteria:
+          type: integer
+          format: int64
+          description: category of product
+          example: 22
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    CriteriaStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    CriteriaStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-02-23T13:33:28Z
+          
+    CriteriaModel:
+      type: object
+      description: Criteria
+      allOf:
+        - $ref: '#/components/schemas/CriteriaDynamicProps'
+        - $ref: '#/components/schemas/CriteriaStaticProps'
+        
+    CriteriaModelTwo:
+      type: object
+      description: Criteria
+      allOf:
+        - $ref: '#/components/schemas/CriteriaDynamicProps'
+        - $ref: '#/components/schemas/CriteriaStaticPropsTwo'
+      properties:
+        group_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        item_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        criteria:
+          type: integer
+          format: int64
+          description: category of product
+          example: 33
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    CriteriaModels:
+      type: object
+      properties:
+        criterias:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/CriteriaModel'
+            - type: object
+              $ref: '#/components/schemas/CriteriaModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    CriteriaIdParameter:
+      name: id
+      in: path
+      description: Criteria id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateCriteriaRequestBody:
+      description: criteria data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CriteriaModel'
+            
+    UpdateCriteriaRequestBody:
+      description: criteria data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CriteriaModel'
+              - properties:
+                  group_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: category of product
+                    example: 55
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-01-21T17:32:28Z
+                      
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetCriteriasResponse:
+        description: Criteria lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - criterias
+              - type: object
+              - properties:
+                  criterias:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CriteriaModel'
+                      - type: object
+                        $ref: '#/components/schemas/CriteriaModelTwo'
+    
+    GetCriteriaResponse:
+      description: Got criteria.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CriteriaModel'
+              
+    UpdateCriteriaResponse:
+      description: Updated criteria.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CriteriaModel'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
