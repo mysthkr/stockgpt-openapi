@@ -1,0 +1,472 @@
+openapi: "3.0.3"
+
+info:
+  title: "StockGPT API"
+  description: |-
+    StockGPT API from Rails API.
+  version: "1.0.0"
+
+servers:
+  - url: https://api.example.com/api/v1
+    description: production
+  - url: https://{environment}.api.example.com/api/v1
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+    description: develop
+  - url: "{protocol}://{host}:{port}/api/v1"
+    description: local
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      host:
+        default: localhost
+      port:
+        enum:
+          - '443'
+          - '8443'
+        default: '443'
+
+tags:
+  - name: Shop
+    description: Access to shop model.
+
+paths:
+  /shops:
+    post:
+      tags:
+      - "Shop"
+      summary: CreateShop
+      operationId: createShop
+      requestBody:
+        $ref: '#/components/requestBodies/CreateShopRequestBody'
+      responses:
+        '200':
+          description: 作成済み店舗
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Shop"
+      summary: 店舗一覧取得
+      description: 店舗一覧
+      operationId: getShopList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /shops/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ShopIdParameter'
+    get:
+      tags:
+        - "Shop"
+      summary: GetShopById
+      description: |-
+        Get shop by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Shop"
+      summary: UpdateShopById
+      description: |-
+        Update shop by id.
+      parameters:
+        - $ref: '#/components/parameters/ShopIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateShopRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateShopResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Shop"
+      summary: DeleteShopById
+      description: |-
+        Delete shop by id.
+      parameters:
+        - $ref: '#/components/parameters/ShopIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /shops/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ShopIdParameter'
+    get:
+      tags:
+        - "Shop"
+      summary: EditShopById
+      parameters:
+        - $ref: '#/components/parameters/ShopIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetShopResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+components:
+  schemas:
+  #-------------------------------
+  # Shop schema
+  #-------------------------------  
+    ShopDynamicProps:
+      type: object
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Seven Eleven
+        prefecture:
+          type: string
+          format: int64
+          description:  prefecture name
+          example: Hokkaido
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+    
+    ShopStaticProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: shop id
+          example: 2
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-01-21T17:32:28Z
+          
+    ShopStaticPropsTwo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: shop id
+          example: 3
+        created_at:
+          type: string
+          format: int64
+          description: created datetime
+          example: 2023-02-23T13:33:28Z
+          
+    ShopModel:
+      type: object
+      description: Shop
+      allOf:
+        - $ref: '#/components/schemas/ShopDynamicProps'
+        - $ref: '#/components/schemas/ShopStaticProps'
+        
+    ShopModelTwo:
+      type: object
+      description: Shop
+      allOf:
+        - $ref: '#/components/schemas/ShopDynamicProps'
+        - $ref: '#/components/schemas/ShopStaticPropsTwo'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Family Mart
+        prefecture:
+          type: string
+          format: int64
+          description:  prefecture name
+          example: Okinawa
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-01-21T17:32:28Z
+          
+          
+    ShopModels:
+      type: object
+      properties:
+        shops:
+          type: array
+          items:
+            oneOf:
+            - type: object
+              $ref: '#/components/schemas/ShopModel'
+            - type: object
+              $ref: '#/components/schemas/ShopModelTwo'
+              
+    
+    ErrorModel:
+      description: Response Error Model.
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          title: error code
+          type: string
+          example: 500
+        message:
+          title: error message
+          type: string
+          example: Internal Server Error.
+                
+  #-------------------------------
+  # Reusable operation parameters
+  #-------------------------------
+  parameters:
+    ShopIdParameter:
+      name: id
+      in: path
+      description: Shop id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    
+  #-------------------------------
+  # Reusable request body
+  #-------------------------------  
+  requestBodies:
+    CreateShopRequestBody:
+      description: shop data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ShopModel'
+            
+    UpdateShopRequestBody:
+      description: shop data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ShopModel'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: category of product
+                    example: Lawson
+                  prefecture:
+                    type: string
+                    format: int64
+                    description:  prefecture name
+                    example: Akita
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-04-24T14:34:44Z
+                      
+    
+
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+  responses:
+    GetShopsResponse:
+        description: Shop lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - shops
+              - type: object
+              - properties:
+                  shops:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ShopModel'
+                      - type: object
+                        $ref: '#/components/schemas/ShopModelTwo'
+    
+    GetShopResponse:
+      description: Got shop.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ShopModel'
+              
+    UpdateShopResponse:
+      description: Updated shop.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ShopModel'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+                  updated_at:
+                    type: string
+                    format: int64
+                    description: updated datetime
+                    example: 2023-03-21T17:32:28Z
+
+    
+    BadRequestResponse:
+      description: | 
+        Bad Request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 400
+              message:
+                example: Bad Request.
+                
+    UnauthorizedResponse:
+      description: | 
+        Unauthorized.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 401
+              message:
+                example: Unauthorized.
+                
+    ForbiddenResponse:
+      description: | 
+        Forbidden.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 403
+              message:
+                example: Forbidden.
+                
+    NotFoundResponse:
+      description: | 
+        Not Found.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 404
+              message:
+                example: Not Found.
+                
+    ConflictErrorResponse:
+      description: | 
+        Conflict.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorModel'
+            properties:
+              code:
+                example: 409
+              message:
+                example: Conflict.
+    InternalServerErrorResponse:
+      description: |-
+        Internal Server Error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorModel'
+          
+          
+          
