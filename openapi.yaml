@@ -36,6 +36,9 @@ servers:
 tags:
   - name: User
     description: Access to user model.
+  - name: Profile
+    description: Access to profile model.
+    
   - name: Item
     description: Access to item model.
 
@@ -170,6 +173,138 @@ paths:
           $ref: '#/components/responses/NotFoundResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /profiles:
+    post:
+      tags:
+      - "Profile"
+      summary: CreateProfile
+      operationId: createProfile
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProfileRequestBody'
+      responses:
+        '200':
+          description: 作成済みプロファイル
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Profile"
+      summary: プロファイル一覧取得
+      description: プロファイル一覧
+      operationId: getProfileList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfilesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /profiles/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProfileIdParameter'
+    get:
+      tags:
+        - "Profile"
+      summary: GetProfileById
+      description: |-
+        Get profile by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Profile"
+      summary: UpdateProfileById
+      description: |-
+        Update profile by id.
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProfileRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProfileResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Profile"
+      summary: DeleteProfileById
+      description: |-
+        Delete profile by id.
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /profiles/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ProfileIdParameter'
+    get:
+      tags:
+        - "Profile"
+      summary: EditProfileById
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
   
   /items:
     post:
@@ -420,6 +555,104 @@ components:
           title: error message
           type: string
           example: Internal Server Error.
+          
+  #-------------------------------
+  # Profile schema
+  #-------------------------------  
+    ProfileDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testname
+        nickname:
+          type: string
+          format: int64
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 2
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 北海道
+
+    ProfileStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: profile id
+          example: 2
+        user_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 2
+          
+    ProfileStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: profile id
+          example: 3
+        user_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 3
+          
+    ProfileModel:
+      type: object
+      description: Profile
+      allOf:
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticProps'
+        
+    ProfileModelTwo:
+      type: object
+      description: Profile
+      allOf:
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testnametwo
+        nickname:
+          type: string
+          format: int64
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 3
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 沖縄県
+          
                 
   #-------------------------------
   # Item schema
@@ -547,6 +780,15 @@ components:
         schema:
           type: integer
         example: 2
+    ProfileIdParameter:
+      name: id
+      in: path
+      description: Profile id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+        
     ItemIdParameter:
       name: id
       in: path
@@ -588,6 +830,49 @@ components:
                     format: int64
                     description: password
                     example: passwordedited
+    
+    CreateProfileRequestBody:
+      description: profile data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProfileModel'
+            
+    UpdateProfileRequestBody:
+      description: profile data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+                    
+                    
+                    
+                    
   
     CreateItemRequestBody:
       description: item data
@@ -641,7 +926,6 @@ components:
                         $ref: '#/components/schemas/UserModel'
                       - type: object
                         $ref: '#/components/schemas/UserModelTwo'
-    
     GetUserResponse:
       description: Got user.
       content:
@@ -669,7 +953,73 @@ components:
                     format: int64
                     description: password
                     example: passwordedited
-                    
+    
+    
+    GetProfilesResponse:
+        description: Profile lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - profiles
+              - type: object
+              - properties:
+                  profiles:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ProfileModel'
+                      - type: object
+                        $ref: '#/components/schemas/ProfileModelTwo'
+    
+    GetProfileResponse:
+      description: Got profile.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              
+    UpdateProfileResponse:
+      description: Updated profile.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+    
+    
+    
+    
+    
+    
+    
+    
+    
     GetItemsResponse:
         description: Item lists
         content:

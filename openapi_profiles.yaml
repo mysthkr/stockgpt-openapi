@@ -34,25 +34,25 @@ servers:
         default: '443'
 
 tags:
-  - name: User
-    description: Access to user model.
+  - name: Profile
+    description: Access to profile model.
 
 paths:
-  /users:
+  /profiles:
     post:
       tags:
-      - "User"
-      summary: CreateUser
-      operationId: createUser
+      - "Profile"
+      summary: CreateProfile
+      operationId: createProfile
       requestBody:
-        $ref: '#/components/requestBodies/CreateUserRequestBody'
+        $ref: '#/components/requestBodies/CreateProfileRequestBody'
       responses:
         '200':
-          description: 作成済みユーザー
+          description: 作成済みプロファイル
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserModel'
+                $ref: '#/components/schemas/ProfileModel'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -63,13 +63,13 @@ paths:
   
     get:
       tags:
-      - "User"
-      summary: ユーザ一覧取得
-      description: ユーザー一覧
-      operationId: getUserList
+      - "Profile"
+      summary: プロファイル一覧取得
+      description: プロファイル一覧
+      operationId: getProfileList
       responses:
         '200':
-          $ref: '#/components/responses/GetUsersResponse'
+          $ref: '#/components/responses/GetProfilesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -77,18 +77,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /users/{id}:
+  /profiles/{id}:
     parameters:
-      - $ref: '#/components/parameters/UserIdParameter'
+      - $ref: '#/components/parameters/ProfileIdParameter'
     get:
       tags:
-        - "User"
-      summary: GetUserById
+        - "Profile"
+      summary: GetProfileById
       description: |-
-        Get user by id.
+        Get profile by id.
       responses:
         '200':
-          $ref: '#/components/responses/GetUserResponse'
+          $ref: '#/components/responses/GetProfileResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -102,17 +102,17 @@ paths:
           
     patch:
       tags:
-        - "User"
-      summary: UpdateUserById
+        - "Profile"
+      summary: UpdateProfileById
       description: |-
-        Update user by id.
+        Update profile by id.
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/ProfileIdParameter'
       requestBody:
-        $ref: '#/components/requestBodies/UpdateUserRequestBody'
+        $ref: '#/components/requestBodies/UpdateProfileRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateUserResponse'
+          $ref: '#/components/responses/UpdateProfileResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -126,15 +126,15 @@ paths:
   
     delete:
       tags:
-        - "User"
-      summary: DeleteUserById
+        - "Profile"
+      summary: DeleteProfileById
       description: |-
-        Delete user by id.
+        Delete profile by id.
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/ProfileIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetUserResponse'
+          $ref: '#/components/responses/GetProfileResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -146,18 +146,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /users/{id}/edit:
+  /profiles/{id}/edit:
     parameters:
-      - $ref: '#/components/parameters/UserIdParameter'
+      - $ref: '#/components/parameters/ProfileIdParameter'
     get:
       tags:
-        - "User"
-      summary: EditUserById
+        - "Profile"
+      summary: EditProfileById
       parameters:
-        - $ref: '#/components/parameters/UserIdParameter'
+        - $ref: '#/components/parameters/ProfileIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetUserResponse'
+          $ref: '#/components/responses/GetProfileResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -172,40 +172,49 @@ paths:
 components:
   schemas:
   #-------------------------------
-  # User schema
+  # Profile schema
   #-------------------------------  
-    UserDynamicProps:
+    ProfileDynamicProps:
       type: object
       properties:
-        email:
+        name:
           type: string
           format: int64
-          description: mail address
-          example: test@gmail.com
-        encrypted_password:
+          description: name
+          example: testname
+        nickname:
           type: string
           format: int64
-          description: password
-          example: password
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 2
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 北海道
         updated_at:
           type: string
           format: int64
           description: updated datetime
           example: 2023-01-21T17:32:28Z
-          
     
-    UserStaticProps:
+    ProfileStaticProps:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: user id
+          description: profile id
           example: 2
-        group_id:
+        user_id:
           type: integer
           format: int64
-          description: group id
+          description: user id
           example: 2
         created_at:
           type: string
@@ -213,18 +222,18 @@ components:
           description: created datetime
           example: 2023-01-21T17:32:28Z
           
-    UserStaticPropsTwo:
+    ProfileStaticPropsTwo:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: user id
+          description: profile id
           example: 3
-        group_id:
+        user_id:
           type: integer
           format: int64
-          description: group id
+          description: user id
           example: 3
         created_at:
           type: string
@@ -232,68 +241,52 @@ components:
           description: created datetime
           example: 2023-01-21T17:32:28Z
           
-    UserAdminOption:
+    ProfileModel:
       type: object
-      properties:
-        admin:
-          type: boolean
-          example: true
-          
-    UserBusinessOption:
-      type: object
-      properties:
-        business:
-          type: boolean
-          example: false
-          
-    UserModel:
-      type: object
-      description: User
+      description: Profile
       allOf:
-        - $ref: '#/components/schemas/UserDynamicProps'
-        - $ref: '#/components/schemas/UserStaticProps'
-        - $ref: '#/components/schemas/UserAdminOption'
-        - $ref: '#/components/schemas/UserBusinessOption'
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticProps'
         
-    UserModelTwo:
+    ProfileModelTwo:
       type: object
-      description: User
+      description: Profile
       allOf:
-        - $ref: '#/components/schemas/UserDynamicProps'
-        - $ref: '#/components/schemas/UserStaticPropsTwo'
-        - $ref: '#/components/schemas/UserAdminOption'
-        - $ref: '#/components/schemas/UserBusinessOption'
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticPropsTwo'
       properties:
-        email:
+        name:
           type: string
           format: int64
-          description: mail address
-          example: test2@gmail.com
-        encrypted_password:
+          description: name
+          example: testnametwo
+        nickname:
           type: string
           format: int64
-          description: password
-          example: password2
-        updated_at:
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 3
+        prefecture:
           type: string
           format: int64
-          description: uodated time
-          example: 2023-02-21T17:32:28Z
-        admin:
-          type: boolean
-          example: false
+          description: prefecture
+          example: 沖縄県
           
-    UserModels:
+    ProfileModels:
       type: object
       properties:
-        users:
+        profiles:
           type: array
           items:
             oneOf:
             - type: object
-              $ref: '#/components/schemas/UserModel'
+              $ref: '#/components/schemas/ProfileModel'
             - type: object
-              $ref: '#/components/schemas/UserModelTwo'
+              $ref: '#/components/schemas/ProfileModelTwo'
               
     
     ErrorModel:
@@ -316,10 +309,10 @@ components:
   # Reusable operation parameters
   #-------------------------------
   parameters:
-    UserIdParameter:
+    ProfileIdParameter:
       name: id
       in: path
-      description: User id.
+      description: Profile id.
       required: true
       schema:
         type: integer
@@ -329,33 +322,43 @@ components:
   # Reusable request body
   #-------------------------------  
   requestBodies:
-    CreateUserRequestBody:
-      description: user data
+    CreateProfileRequestBody:
+      description: profile data
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/UserModel'
+            $ref: '#/components/schemas/ProfileModel'
             
-    UpdateUserRequestBody:
-      description: user data
+    UpdateProfileRequestBody:
+      description: profile data
       required: true
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserDynamicProps'
+              - $ref: '#/components/schemas/ProfileDynamicProps'
               - properties:
-                  email:
+                  name:
                     type: string
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
+                    description: name
+                    example: testnametwo
+                  nickname:
                     type: string
                     format: int64
-                    description: password
-                    example: passwordedited
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
                   updated_at:
                     type: string
                     format: int64
@@ -369,56 +372,61 @@ components:
   # Reusable responses
   #-------------------------------
   responses:
-    GetUsersResponse:
-        description: User lists
+    GetProfilesResponse:
+        description: Profile lists
         content:
           application/json:
             schema:
               allOf:
               - required:
-                - users
+                - profiles
               - type: object
               - properties:
-                  users:
+                  profiles:
                     type: array
                     items:
                       oneOf:
                       - type: object
-                        $ref: '#/components/schemas/UserModel'
+                        $ref: '#/components/schemas/ProfileModel'
                       - type: object
-                        $ref: '#/components/schemas/UserModelTwo'
+                        $ref: '#/components/schemas/ProfileModelTwo'
     
-    GetUserResponse:
-      description: Got user.
+    GetProfileResponse:
+      description: Got profile.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/ProfileModel'
               
-    UpdateUserResponse:
-      description: Updated user.
+    UpdateProfileResponse:
+      description: Updated profile.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/ProfileModel'
               - properties:
-                  email:
+                  name:
                     type: string
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
+                    description: name
+                    example: testnametwo
+                  nickname:
                     type: string
                     format: int64
-                    description: password
-                    example: passwordedited
-                  updated_at:
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
                     type: string
                     format: int64
-                    description: updated datetime
-                    example: 2023-03-21T17:32:28Z
+                    description: prefecture
+                    example: 沖縄県
 
     
     BadRequestResponse:
