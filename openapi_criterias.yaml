@@ -34,10 +34,1876 @@ servers:
         default: '443'
 
 tags:
+  - name: User
+    description: Access to user model.
+  - name: Profile
+    description: Access to profile model.
+  - name: Group
+    description: Access to group model.
+  - name: Grocery
+    description: Access to grocery model.
+  - name: Product
+    description: Access to product model.
+  - name: CategoryGrocery
+    description: Access to category_grocery model.
+  - name: CategoryProduct
+    description: Access to category_product model.
+  - name: SubCategoryGrocery
+    description: Access to sub_category_grocery model.
+  - name: SubCategoryProduct
+    description: Access to sub_category_product model.
+  - name: StockItem
+    description: Access to stockItem model.
+  - name: Request
+    description: Access to request model.
+  - name: ToBuyList
+    description: Access to to_buy_list model.
+  - name: Cart
+    description: Access to cart model.
+  - name: Maker
+    description: Access to maker model.
   - name: Criteria
     description: Access to criteria model.
+    
+  - name: Item
+    description: Access to item model.
 
 paths:
+  /users:
+    post:
+      tags:
+      - "User"
+      summary: CreateUser
+      operationId: createUser
+      requestBody:
+        $ref: '#/components/requestBodies/CreateUserRequestBody'
+      responses:
+        '200':
+          description: 作成済みユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "User"
+      summary: ユーザ一覧取得
+      description: ユーザー一覧
+      operationId: getUserList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUsersResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /users/{id}:
+    parameters:
+      - $ref: '#/components/parameters/UserIdParameter'
+    get:
+      tags:
+        - "User"
+      summary: GetUserById
+      description: |-
+        Get user by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "User"
+      summary: UpdateUserById
+      description: |-
+        Update user by id.
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateUserRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateUserResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "User"
+      summary: DeleteUserById
+      description: |-
+        Delete user by id.
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUserResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /users/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/UserIdParameter'
+    get:
+      tags:
+        - "User"
+      summary: EditUserById
+      parameters:
+        - $ref: '#/components/parameters/UserIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /profiles:
+    post:
+      tags:
+      - "Profile"
+      summary: CreateProfile
+      operationId: createProfile
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProfileRequestBody'
+      responses:
+        '200':
+          description: 作成済みプロファイル
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Profile"
+      summary: プロファイル一覧取得
+      description: プロファイル一覧
+      operationId: getProfileList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfilesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /profiles/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProfileIdParameter'
+    get:
+      tags:
+        - "Profile"
+      summary: GetProfileById
+      description: |-
+        Get profile by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Profile"
+      summary: UpdateProfileById
+      description: |-
+        Update profile by id.
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProfileRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProfileResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Profile"
+      summary: DeleteProfileById
+      description: |-
+        Delete profile by id.
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /profiles/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ProfileIdParameter'
+    get:
+      tags:
+        - "Profile"
+      summary: EditProfileById
+      parameters:
+        - $ref: '#/components/parameters/ProfileIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProfileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /groups:
+    post:
+      tags:
+      - "Group"
+      summary: CreateGroup
+      operationId: createGroup
+      requestBody:
+        $ref: '#/components/requestBodies/CreateGroupRequestBody'
+      responses:
+        '200':
+          description: 作成済みグループ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Group"
+      summary: グループ一覧取得
+      description: グループ一覧
+      operationId: getGroupList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroupsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /groups/{id}:
+    parameters:
+      - $ref: '#/components/parameters/GroupIdParameter'
+    get:
+      tags:
+        - "Group"
+      summary: GetGroupById
+      description: |-
+        Get group by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Group"
+      summary: UpdateGroupById
+      description: |-
+        Update group by id.
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroupRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateGroupResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Group"
+      summary: DeleteGroupById
+      description: |-
+        Delete group by id.
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroupResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /groups/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/GroupIdParameter'
+    get:
+      tags:
+        - "Group"
+      summary: EditGroupById
+      parameters:
+        - $ref: '#/components/parameters/GroupIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroupResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  
+  /groceries:
+    post:
+      tags:
+      - "Grocery"
+      summary: CreateGrocery
+      operationId: createGrocery
+      requestBody:
+        $ref: '#/components/requestBodies/CreateGroceryRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroceryModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Grocery"
+      summary: 食料品一覧取得
+      description: 食料品一覧
+      operationId: getGroceryList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGrocerysResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /groceries/{id}:
+    parameters:
+      - $ref: '#/components/parameters/GroceryIdParameter'
+    get:
+      tags:
+        - "Grocery"
+      summary: GetGroceryById
+      description: |-
+        Get grocery by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Grocery"
+      summary: UpdateGroceryById
+      description: |-
+        Update grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroceryRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Grocery"
+      summary: DeleteGroceryById
+      description: |-
+        Delete grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /groceries/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/GroceryIdParameter'
+    get:
+      tags:
+        - "Grocery"
+      summary: EditGroceryById
+      parameters:
+        - $ref: '#/components/parameters/GroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+  /products:
+    post:
+      tags:
+      - "Product"
+      summary: CreateProduct
+      operationId: createProduct
+      requestBody:
+        $ref: '#/components/requestBodies/CreateProductRequestBody'
+      responses:
+        '200':
+          description: 作成済み日用品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Product"
+      summary: 日用品一覧取得
+      description: 日用品一覧
+      operationId: getProductList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ProductIdParameter'
+    get:
+      tags:
+        - "Product"
+      summary: GetProductById
+      description: |-
+        Get product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Product"
+      summary: UpdateProductById
+      description: |-
+        Update product by id.
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProductRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Product"
+      summary: DeleteProductById
+      description: |-
+        Delete product by id.
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /products/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ProductIdParameter'
+    get:
+      tags:
+        - "Product"
+      summary: EditProductById
+      parameters:
+        - $ref: '#/components/parameters/ProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /category_groceries:
+    post:
+      tags:
+      - "CategoryGrocery"
+      summary: CreateCategoryGrocery
+      operationId: createCategoryGrocery
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCategoryGroceryRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品カテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryGroceryModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "CategoryGrocery"
+      summary: 食料品カテゴリー一覧取得
+      description: 食料品カテゴリー一覧
+      operationId: getCategoryGroceryList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceriesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_groceries/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+    get:
+      tags:
+        - "CategoryGrocery"
+      summary: GetCategoryGroceryById
+      description: |-
+        Get category_grocery by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "CategoryGrocery"
+      summary: UpdateCategoryGroceryById
+      description: |-
+        Update category_grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCategoryGroceryRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCategoryGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "CategoryGrocery"
+      summary: DeleteCategoryGroceryById
+      description: |-
+        Delete category_grocery by id.
+      parameters:
+        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_groceries/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+    get:
+      tags:
+        - "CategoryGrocery"
+      summary: EditCategoryGroceryById
+      parameters:
+        - $ref: '#/components/parameters/CategoryGroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_products:
+    post:
+      tags:
+      - "CategoryProduct"
+      summary: CreateCategoryProduct
+      operationId: createCategoryProduct
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCategoryProductRequestBody'
+      responses:
+        '200':
+          description: 作成済み日用品カテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryProductModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "CategoryProduct"
+      summary: 日用品カテゴリー一覧取得
+      description: 日用品カテゴリー一覧
+      operationId: getCategoryProductList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryProductsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CategoryProductIdParameter'
+    get:
+      tags:
+        - "CategoryProduct"
+      summary: GetCategoryProductById
+      description: |-
+        Get category_product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "CategoryProduct"
+      summary: UpdateCategoryProductById
+      description: |-
+        Update category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/CategoryProductIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCategoryProductRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "CategoryProduct"
+      summary: DeleteCategoryProductById
+      description: |-
+        Delete category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/CategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /category_products/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CategoryProductIdParameter'
+    get:
+      tags:
+        - "CategoryProduct"
+      summary: EditCategoryProductById
+      parameters:
+        - $ref: '#/components/parameters/CategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+    
+  /sub_category_groceries:
+    post:
+      tags:
+      - "SubCategoryGrocery"
+      summary: CreateSubCategoryGrocery
+      operationId: createSubCategoryGrocery
+      requestBody:
+        $ref: '#/components/requestBodies/CreateSubCategoryGroceryRequestBody'
+      responses:
+        '200':
+          description: 作成済み食料品サブカテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategoryGroceryModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "SubCategoryGrocery"
+      summary: 食料品サブカテゴリー一覧取得
+      description: 食料品サブカテゴリー一覧
+      operationId: getSubCategoryGroceryList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryGroceriesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_groceries/{id}:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
+    get:
+      tags:
+        - "SubCategoryGrocery"
+      summary: GetSubCategoryGroceryById
+      description: |-
+        Get category_product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "SubCategoryGrocery"
+      summary: UpdateSubCategoryGroceryById
+      description: |-
+        Update category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateSubCategoryGroceryRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateSubCategoryGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "SubCategoryGrocery"
+      summary: DeleteSubCategoryGroceryById
+      description: |-
+        Delete category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryGroceryResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_groceries/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
+    get:
+      tags:
+        - "SubCategoryGrocery"
+      summary: EditSubCategoryGroceryById
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryGroceryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+  /sub_category_products:
+    post:
+      tags:
+      - "SubCategoryProduct"
+      summary: CreateSubCategoryProduct
+      operationId: createSubCategoryProduct
+      requestBody:
+        $ref: '#/components/requestBodies/CreateSubCategoryProductRequestBody'
+      responses:
+        '200':
+          description: 作成済み日用品サブカテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategoryProductModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "SubCategoryProduct"
+      summary: 日用品サブカテゴリー一覧取得
+      description: 日用品サブカテゴリー一覧
+      operationId: getSubCategoryProductList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+    get:
+      tags:
+        - "SubCategoryProduct"
+      summary: GetSubCategoryProductById
+      description: |-
+        Get category_product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "SubCategoryProduct"
+      summary: UpdateSubCategoryProductById
+      description: |-
+        Update category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateSubCategoryProductRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateSubCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "SubCategoryProduct"
+      summary: DeleteSubCategoryProductById
+      description: |-
+        Delete category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_products/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+    get:
+      tags:
+        - "SubCategoryProduct"
+      summary: EditSubCategoryProductById
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /stock_items:
+    post:
+      tags:
+      - "StockItem"
+      summary: CreateStockItem
+      operationId: createStockItem
+      requestBody:
+        $ref: '#/components/requestBodies/CreateStockItemRequestBody'
+      responses:
+        '200':
+          description: 作成済みユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItemModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "StockItem"
+      summary: ユーザ一覧取得
+      description: ユーザー一覧
+      operationId: getStockItemList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /stock_items/{id}:
+    parameters:
+      - $ref: '#/components/parameters/StockItemIdParameter'
+    get:
+      tags:
+        - "StockItem"
+      summary: GetStockItemById
+      description: |-
+        Get stockItem by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "StockItem"
+      summary: UpdateStockItemById
+      description: |-
+        Update stockItem by id.
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateStockItemRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateStockItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "StockItem"
+      summary: DeleteStockItemById
+      description: |-
+        Delete stockItem by id.
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /stock_items/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/StockItemIdParameter'
+    get:
+      tags:
+        - "StockItem"
+      summary: EditStockItemById
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /requests:
+    post:
+      tags:
+      - "Request"
+      summary: CreateRequest
+      operationId: createRequest
+      requestBody:
+        $ref: '#/components/requestBodies/CreateRequestRequestBody'
+      responses:
+        '200':
+          description: 作成済みリクエストー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Request"
+      summary: リクエスト覧取得
+      description: リクエストー一覧
+      operationId: getRequestList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /requests/{id}:
+    parameters:
+      - $ref: '#/components/parameters/RequestIdParameter'
+    get:
+      tags:
+        - "Request"
+      summary: GetRequestById
+      description: |-
+        Get request by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Request"
+      summary: UpdateRequestById
+      description: |-
+        Update request by id.
+      parameters:
+        - $ref: '#/components/parameters/RequestIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateRequestRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Request"
+      summary: DeleteRequestById
+      description: |-
+        Delete request by id.
+      parameters:
+        - $ref: '#/components/parameters/RequestIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /requests/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/RequestIdParameter'
+    get:
+      tags:
+        - "Request"
+      summary: EditRequestById
+      parameters:
+        - $ref: '#/components/parameters/RequestIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetRequestResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /to_buy_lists:
+    post:
+      tags:
+      - "ToBuyList"
+      summary: CreateToBuyList
+      operationId: createToBuyList
+      requestBody:
+        $ref: '#/components/requestBodies/CreateToBuyListRequestBody'
+      responses:
+        '200':
+          description: 作成済み買い物リスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToBuyListModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "ToBuyList"
+      summary: 買い物リスト一覧取得
+      description: 買い物リスト一覧
+      operationId: getToBuyListList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetToBuyListsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /to_buy_lists/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ToBuyListIdParameter'
+    get:
+      tags:
+        - "ToBuyList"
+      summary: GetToBuyListById
+      description: |-
+        Get to_buy_list by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetToBuyListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "ToBuyList"
+      summary: UpdateToBuyListById
+      description: |-
+        Update to_buy_list by id.
+      parameters:
+        - $ref: '#/components/parameters/ToBuyListIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateToBuyListRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateToBuyListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "ToBuyList"
+      summary: DeleteToBuyListById
+      description: |-
+        Delete to_buy_list by id.
+      parameters:
+        - $ref: '#/components/parameters/ToBuyListIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetToBuyListResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /to_buy_lists/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ToBuyListIdParameter'
+    get:
+      tags:
+        - "ToBuyList"
+      summary: EditToBuyListById
+      parameters:
+        - $ref: '#/components/parameters/ToBuyListIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetToBuyListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /carts:
+    post:
+      tags:
+      - "Cart"
+      summary: CreateCart
+      operationId: createCart
+      requestBody:
+        $ref: '#/components/requestBodies/CreateCartRequestBody'
+      responses:
+        '200':
+          description: 作成済みカート
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Cart"
+      summary: カート一覧取得
+      description: カート一覧
+      operationId: getCartList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /carts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/CartIdParameter'
+    get:
+      tags:
+        - "Cart"
+      summary: GetCartById
+      description: |-
+        Get cart by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Cart"
+      summary: UpdateCartById
+      description: |-
+        Update cart by id.
+      parameters:
+        - $ref: '#/components/parameters/CartIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCartRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCartResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Cart"
+      summary: DeleteCartById
+      description: |-
+        Delete cart by id.
+      parameters:
+        - $ref: '#/components/parameters/CartIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /carts/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/CartIdParameter'
+    get:
+      tags:
+        - "Cart"
+      summary: EditCartById
+      parameters:
+        - $ref: '#/components/parameters/CartIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /makers:
+    post:
+      tags:
+      - "Maker"
+      summary: CreateMaker
+      operationId: createMaker
+      requestBody:
+        $ref: '#/components/requestBodies/CreateMakerRequestBody'
+      responses:
+        '200':
+          description: 作成済みメーカー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MakerModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Maker"
+      summary: メーカー一覧取得
+      description: メーカー一覧
+      operationId: getMakerList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakersResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /makers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/MakerIdParameter'
+    get:
+      tags:
+        - "Maker"
+      summary: GetMakerById
+      description: |-
+        Get maker by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Maker"
+      summary: UpdateMakerById
+      description: |-
+        Update maker by id.
+      parameters:
+        - $ref: '#/components/parameters/MakerIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateMakerRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateMakerResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Maker"
+      summary: DeleteMakerById
+      description: |-
+        Delete maker by id.
+      parameters:
+        - $ref: '#/components/parameters/MakerIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakerResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /makers/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/MakerIdParameter'
+    get:
+      tags:
+        - "Maker"
+      summary: EditMakerById
+      parameters:
+        - $ref: '#/components/parameters/MakerIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetMakerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
   /criterias:
     post:
       tags:
@@ -168,111 +2034,248 @@ paths:
           $ref: '#/components/responses/NotFoundResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
-    
+          
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /items:
+    post:
+      tags:
+      - "Item"
+      summary: CreateItem
+      operationId: createItem
+      requestBody:
+        $ref: '#/components/requestBodies/CreateItemRequestBody'
+      responses:
+        '200':
+          description: 作成済み商品
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "Item"
+      summary: 商品一覧取得
+      description: 商品一覧
+      operationId: getItemList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /items/{id}:
+    parameters:
+      - $ref: '#/components/parameters/ItemIdParameter'
+    get:
+      tags:
+        - "Item"
+      summary: GetItemById
+      description: |-
+        Get item by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "Item"
+      summary: UpdateItemById
+      description: |-
+        Update item by id.
+      parameters:
+        - $ref: '#/components/parameters/ItemIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateItemRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "Item"
+      summary: DeleteItemById
+      description: |-
+        Delete item by id.
+      parameters:
+        - $ref: '#/components/parameters/ItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /items/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/ItemIdParameter'
+    get:
+      tags:
+        - "Item"
+      summary: EditItemById
+      parameters:
+        - $ref: '#/components/parameters/ItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+
+
 components:
   schemas:
   #-------------------------------
-  # Criteria schema
+  # User schema
   #-------------------------------  
-    CriteriaDynamicProps:
+    UserDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
       properties:
-        group_id:
-          type: integer
-          format: int64
-          description: criteria id
-          example: 2
-        item_id:
-          type: integer
-          format: int64
-          description: criteria id
-          example: 2
-        criteria:
-          type: integer
-          format: int64
-          description: category of product
-          example: 22
-        updated_at:
+        email:
           type: string
           format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
+          description: mail address
+          example: test@gmail.com
+        encrypted_password:
+          type: string
+          format: int64
+          description: password
+          example: password
           
     
-    CriteriaStaticProps:
+    UserStaticProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
           type: integer
           format: int64
-          description: criteria id
+          description: user id
           example: 2
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
-          
-    CriteriaStaticPropsTwo:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: criteria id
-          example: 3
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-02-23T13:33:28Z
-          
-    CriteriaModel:
-      type: object
-      description: Criteria
-      allOf:
-        - $ref: '#/components/schemas/CriteriaDynamicProps'
-        - $ref: '#/components/schemas/CriteriaStaticProps'
-        
-    CriteriaModelTwo:
-      type: object
-      description: Criteria
-      allOf:
-        - $ref: '#/components/schemas/CriteriaDynamicProps'
-        - $ref: '#/components/schemas/CriteriaStaticPropsTwo'
-      properties:
         group_id:
           type: integer
           format: int64
-          description: criteria id
-          example: 3
-        item_id:
-          type: integer
-          format: int64
-          description: criteria id
-          example: 3
-        criteria:
-          type: integer
-          format: int64
-          description: category of product
-          example: 33
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
+          description: group id
+          example: 2
           
-    CriteriaModels:
+    UserStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: user id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 3
+          
+    UserAdminOption:
       type: object
       properties:
-        criterias:
-          type: array
-          items:
-            oneOf:
-            - type: object
-              $ref: '#/components/schemas/CriteriaModel'
-            - type: object
-              $ref: '#/components/schemas/CriteriaModelTwo'
+        admin:
+          type: boolean
+          example: true
+          
+    UserBusinessOption:
+      type: object
+      properties:
+        business:
+          type: boolean
+          example: false
+          
+    UserModel:
+      type: object
+      description: User
+      allOf:
+        - $ref: '#/components/schemas/UserDynamicProps'
+        - $ref: '#/components/schemas/UserStaticProps'
+        - $ref: '#/components/schemas/UserAdminOption'
+        - $ref: '#/components/schemas/UserBusinessOption'
+        
+    UserModelTwo:
+      type: object
+      description: User
+      allOf:
+        - $ref: '#/components/schemas/UserDynamicProps'
+        - $ref: '#/components/schemas/UserStaticPropsTwo'
+        - $ref: '#/components/schemas/UserAdminOption'
+        - $ref: '#/components/schemas/UserBusinessOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        email:
+          type: string
+          format: int64
+          description: mail address
+          example: test2@gmail.com
+        encrypted_password:
+          type: string
+          format: int64
+          description: password
+          example: password2
+        admin:
+          type: boolean
+          example: false
               
     
     ErrorModel:
@@ -290,15 +2293,1357 @@ components:
           title: error message
           type: string
           example: Internal Server Error.
+          
+  #-------------------------------
+  # Profile schema
+  #-------------------------------  
+    ProfileDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testname
+        nickname:
+          type: string
+          format: int64
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 2
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 北海道
+
+    ProfileStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: profile id
+          example: 2
+        user_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 2
+          
+    ProfileStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: profile id
+          example: 3
+        user_id:
+          type: integer
+          format: int64
+          description: user id
+          example: 3
+          
+    ProfileModel:
+      type: object
+      description: Profile
+      allOf:
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticProps'
+        
+    ProfileModelTwo:
+      type: object
+      description: Profile
+      allOf:
+        - $ref: '#/components/schemas/ProfileDynamicProps'
+        - $ref: '#/components/schemas/ProfileStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testnametwo
+        nickname:
+          type: string
+          format: int64
+          description: nickname
+          example: test nicky
+        roommante_number:
+          type: integer
+          format: int64
+          description: roommante number
+          example: 3
+        prefecture:
+          type: string
+          format: int64
+          description: prefecture
+          example: 沖縄県
+  
+  #-------------------------------
+  # Group schema
+  #-------------------------------  
+    GroupDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: groupname
+    
+    GroupStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+        
+    GroupStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: group id
+          example: 3
+          
+    GroupModel:
+      type: object
+      description: Group
+      allOf:
+        - $ref: '#/components/schemas/GroupDynamicProps'
+        - $ref: '#/components/schemas/GroupStaticProps'
+        
+    GroupModelTwo:
+      type: object
+      description: Group
+      allOf:
+        - $ref: '#/components/schemas/GroupDynamicProps'
+        - $ref: '#/components/schemas/GroupStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: testnametwo
+          
+  #-------------------------------
+  # Grocery schema
+  #-------------------------------  
+    GroceryDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 2
+    
+    GroceryStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: grocery id
+          example: 2
+          
+    GroceryStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: grocery id
+          example: 3
+          
+    GroceryModel:
+      type: object
+      description: Grocery
+      allOf:
+        - $ref: '#/components/schemas/GroceryDynamicProps'
+        - $ref: '#/components/schemas/GroceryStaticProps'
+        
+    GroceryModelTwo:
+      type: object
+      description: Grocery
+      allOf:
+        - $ref: '#/components/schemas/GroceryDynamicProps'
+        - $ref: '#/components/schemas/GroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 3
+          
+              
+  #-------------------------------
+  # Product schema
+  #-------------------------------  
+    ProductDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 4
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 4
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 4
+    
+    ProductStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: product id
+          example: 4
+          
+    ProductStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: product id
+          example: 5
+    
+    ProductMakerOption:
+      type: object
+      properties:
+        maker_id:
+          type: integer
+          example: 4
+          
+    ProductPictureOption:
+      type: object
+      properties:
+        picture:
+          type: string
+          example: image4.png
+          
+          
+    ProductModel:
+      type: object
+      description: Product
+      allOf:
+        - $ref: '#/components/schemas/ProductDynamicProps'
+        - $ref: '#/components/schemas/ProductStaticProps'
+        - $ref: '#/components/schemas/ProductMakerOption'
+        - $ref: '#/components/schemas/ProductPictureOption'
+        
+    ProductModelTwo:
+      type: object
+      description: Product
+      allOf:
+        - $ref: '#/components/schemas/ProductDynamicProps'
+        - $ref: '#/components/schemas/ProductStaticPropsTwo'
+        - $ref: '#/components/schemas/ProductMakerOption'
+        - $ref: '#/components/schemas/ProductPictureOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 5
+        subcategory_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 5
+        category_id:
+          type: integer
+          format: int64
+          description: item_id
+          example: 5
+          
+              
+  #-------------------------------
+  # CategoryGrocery schema
+  #-------------------------------  
+    CategoryGroceryDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+    
+    CategoryGroceryStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_grocery id
+          example: 2
+          
+    CategoryGroceryStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_grocery id
+          example: 3
+          
+    CategoryGroceryModel:
+      type: object
+      description: CategoryGrocery
+      allOf:
+        - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/CategoryGroceryStaticProps'
+        
+    CategoryGroceryModelTwo:
+      type: object
+      description: CategoryGrocery
+      allOf:
+        - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/CategoryGroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name two
+          
+  
+  #-------------------------------
+  # CategoryProduct schema
+  #-------------------------------  
+    CategoryProductDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+    
+    CategoryProductStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 2
+          
+    CategoryProductStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 3
+          
+    CategoryProductModel:
+      type: object
+      description: CategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/CategoryProductDynamicProps'
+        - $ref: '#/components/schemas/CategoryProductStaticProps'
+        
+    CategoryProductModelTwo:
+      type: object
+      description: CategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/CategoryProductDynamicProps'
+        - $ref: '#/components/schemas/CategoryProductStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name two
+  
+  #-------------------------------
+  # SubCategoryGrocery schema
+  #-------------------------------  
+    SubCategoryGroceryDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 2
+    
+    SubCategoryGroceryStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 2
+          
+    SubCategoryGroceryStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 3
+          
+    SubCategoryGroceryModel:
+      type: object
+      description: SubCategoryGrocery
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryGroceryStaticProps'
+        
+    SubCategoryGroceryModelTwo:
+      type: object
+      description: SubCategoryGrocery
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryGroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 3
+  
+  #-------------------------------
+  # SubCategoryProduct schema
+  #-------------------------------  
+    SubCategoryProductDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 2
+    
+    SubCategoryProductStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 2
+          
+    SubCategoryProductStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 3
+          
+    SubCategoryProductModel:
+      type: object
+      description: SubCategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryProductStaticProps'
+        
+    SubCategoryProductModelTwo:
+      type: object
+      description: SubCategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryProductStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 3
+  
+  #-------------------------------
+  # StockItem schema
+  #-------------------------------  
+    StockItemDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria days
+          example: 2
+        alarm_date:
+          type: string
+          format: int64
+          description: alarm date
+          example: 2023-01-21
+        quantity:
+          type: integer
+          format: int64
+          description: price
+          example: 2
+    
+    StockItemStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: stockItem id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+          
+    StockItemStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: stockItem id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 3
+          
+    StockItemPriceOption:
+      type: object
+      properties:
+        price:
+          type: integer
+          format: int64
+          description: price
+          example: 300
+          
+    StockItemShopOption:
+      type: object
+      properties:
+        shop_id:
+          type: integer
+          format: int64
+          description: price
+          example: 3
+          
+    StockItemModel:
+      type: object
+      description: StockItem
+      allOf:
+        - $ref: '#/components/schemas/StockItemDynamicProps'
+        - $ref: '#/components/schemas/StockItemStaticProps'
+        
+    StockItemModelTwo:
+      type: object
+      description: StockItem
+      allOf:
+        - $ref: '#/components/schemas/StockItemDynamicProps'
+        - $ref: '#/components/schemas/StockItemStaticPropsTwo'
+        - $ref: '#/components/schemas/StockItemPriceOption'
+        - $ref: '#/components/schemas/StockItemShopOption'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria days
+          example: 3
+        alarm_date:
+          type: string
+          format: int64
+          description: alarm date
+          example: 2023-03-23
+        quantity:
+          type: integer
+          format: int64
+          description: price
+          example: 33
+  
+  #-------------------------------
+  # Request schema
+  #-------------------------------  
+    RequestDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        request_type:
+          type: string
+          format: int64
+          description: category of request
+          example: category_requests
+        request_name:
+          type: string
+          format: int64
+          description: request name
+          example: toilet
+          
+    
+    RequestStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: request id
+          example: 2
+          
+    RequestStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: request id
+          example: 3
+          
+    RequestRegisterFlagOption:
+      type: object
+      properties:
+        register_flag:
+          type: boolean
+          example: false
+          
+    RequestModel:
+      type: object
+      description: Request
+      allOf:
+        - $ref: '#/components/schemas/RequestDynamicProps'
+        - $ref: '#/components/schemas/RequestStaticProps'
+        - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        
+    RequestModelTwo:
+      type: object
+      description: Request
+      allOf:
+        - $ref: '#/components/schemas/RequestDynamicProps'
+        - $ref: '#/components/schemas/RequestStaticPropsTwo'
+        - $ref: '#/components/schemas/RequestRegisterFlagOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        request_type:
+          type: string
+          format: int64
+          description: request type
+          example: category_groceries
+        request_name:
+          type: string
+          format: int64
+          description: request name
+          example: kitchen
+        register_flag:
+          type: boolean
+          example: true
+  
+  #-------------------------------
+  # ToBuyList schema
+  #-------------------------------  
+    ToBuyListDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item id
+          example: 2
+        deleted_at:
+          type: string
+          format: int64
+          description: deleted datetime
+          example: null
+          
+    ToBuyListStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: to_buy_list id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: to_buy_list id
+          example: 2
+          
+    ToBuyListStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: to_buy_list id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: to_buy_list id
+          example: 3
+          
+    RequestBuyFlagOption:
+      type: object
+      properties:
+        buy_flag:
+          type: boolean
+          example: false
+          
+    ToBuyListModel:
+      type: object
+      description: ToBuyList
+      allOf:
+        - $ref: '#/components/schemas/ToBuyListDynamicProps'
+        - $ref: '#/components/schemas/ToBuyListStaticProps'
+        - $ref: '#/components/schemas/RequestBuyFlagOption'
+        
+    ToBuyListModelTwo:
+      type: object
+      description: ToBuyList
+      allOf:
+        - $ref: '#/components/schemas/ToBuyListDynamicProps'
+        - $ref: '#/components/schemas/ToBuyListStaticPropsTwo'
+        - $ref: '#/components/schemas/RequestBuyFlagOption'
+      properties:
+        item_id:
+          type: integer
+          format: int64
+          description: item id
+          example: 3
+        deleted_at:
+          type: string
+          format: int64
+          description: deleted datetime
+          example: 2023-03-03T03:03:03Z
+        buy_flag:
+          type: boolean
+          example: true
+  
+  #-------------------------------
+  # Cart schema
+  #-------------------------------  
+    CartDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria
+          example: 2
+        price:
+          type: integer
+          format: int64
+          description: criteria
+          example: 222
+          
+    
+    CartStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 2
+        item_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 2
+          
+    CartStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 3
+        item_id:
+          type: integer
+          format: int64
+          description: cart id
+          example: 3
+          
+    RequestDeletedOption:
+      type: object
+      properties:
+        deleted_at:
+          type: string
+          format: int64
+          description: deleted datetime
+          example: 2023-04-24T14:34:56Z
+          
+    CartModel:
+      type: object
+      description: Cart
+      allOf:
+        - $ref: '#/components/schemas/CartDynamicProps'
+        - $ref: '#/components/schemas/CartStaticProps'
+        - $ref: '#/components/schemas/RequestDeletedOption'
+        
+    CartModelTwo:
+      type: object
+      description: Cart
+      allOf:
+        - $ref: '#/components/schemas/CartDynamicProps'
+        - $ref: '#/components/schemas/CartStaticPropsTwo'
+        - $ref: '#/components/schemas/RequestDeletedOption'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria
+          example: 3
+        price:
+          type: integer
+          format: int64
+          description: criteria
+          example: 333
+  #-------------------------------
+  # Maker schema
+  #-------------------------------  
+    MakerDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: criteria
+          example: kaou
+    
+    MakerStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: maker id
+          example: 2
+          
+    MakerStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: maker id
+          example: 3
+          
+    MakerModel:
+      type: object
+      description: Maker
+      allOf:
+        - $ref: '#/components/schemas/MakerDynamicProps'
+        - $ref: '#/components/schemas/MakerStaticProps'
+        
+    MakerModelTwo:
+      type: object
+      description: Maker
+      allOf:
+        - $ref: '#/components/schemas/MakerDynamicProps'
+        - $ref: '#/components/schemas/MakerStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: criteria
+          example: kaou
+  
+  #-------------------------------
+  # Criteria schema
+  #-------------------------------  
+    CriteriaDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        group_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        item_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+        criteria:
+          type: integer
+          format: int64
+          description: category of product
+          example: 22
+          
+    
+    CriteriaStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 2
+          
+    CriteriaStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+          
+    CriteriaModel:
+      type: object
+      description: Criteria
+      allOf:
+        - $ref: '#/components/schemas/CriteriaDynamicProps'
+        - $ref: '#/components/schemas/CriteriaStaticProps'
+        
+    CriteriaModelTwo:
+      type: object
+      description: Criteria
+      allOf:
+        - $ref: '#/components/schemas/CriteriaDynamicProps'
+        - $ref: '#/components/schemas/CriteriaStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        group_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        item_id:
+          type: integer
+          format: int64
+          description: criteria id
+          example: 3
+        criteria:
+          type: integer
+          format: int64
+          description: category of product
+          example: 33
+  
+  
+  
+  
+  
+  
+  
+  
+          
+                
+                
+                
+                
+                
+  #-------------------------------
+  # Item schema
+  #-------------------------------  
+    ItemDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Egg
+        criteria:
+          type: integer
+          format: int64
+          description: item id
+          example: 22
+          
+    
+    ItemStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: item id
+          example: 2
+          
+    ItemStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: item id
+          example: 3
+          
+    ItemModel:
+      type: object
+      description: Item
+      allOf:
+        - $ref: '#/components/schemas/ItemDynamicProps'
+        - $ref: '#/components/schemas/ItemStaticProps'
+        
+    ItemModelTwo:
+      type: object
+      description: Item
+      allOf:
+        - $ref: '#/components/schemas/ItemDynamicProps'
+        - $ref: '#/components/schemas/ItemStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: category of product
+          example: Miso
+        criteria:
+          type: integer
+          format: int64
+          description: item id
+          example: 333
+              
+    UpdateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-02-22T22:22:22Z
+          
+    CreateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-02-22T22:22:22Z
+          
+    EditUpdateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-04-04T04:04:04Z
+    
+    SecondUpdateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-03T03:03:03Z
+    
+    SecondCreateTimestamp:
+      type: object
+      properties:
+        updated_at:
+          type: string
+          format: int64
+          description: updated datetime
+          example: 2023-03-03T03:03:03Z
+    
+    
+      
+      
                 
   #-------------------------------
   # Reusable operation parameters
   #-------------------------------
   parameters:
+    UserIdParameter:
+        name: id
+        in: path
+        description: User id.
+        required: true
+        schema:
+          type: integer
+        example: 2
+    ProfileIdParameter:
+      name: id
+      in: path
+      description: Profile id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    GroupIdParameter:
+      name: id
+      in: path
+      description: Group id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    GroceryIdParameter:
+      name: id
+      in: path
+      description: Grocery id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    ProductIdParameter:
+      name: id
+      in: path
+      description: Product id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    CategoryGroceryIdParameter:
+      name: id
+      in: path
+      description: CategoryGrocery id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    CategoryProductIdParameter:
+      name: id
+      in: path
+      description: CategoryProduct id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    SubCategoryGroceryIdParameter:
+      name: id
+      in: path
+      description: SubCategoryGrocery id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    SubCategoryProductIdParameter:
+      name: id
+      in: path
+      description: SubCategoryProduct id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    StockItemIdParameter:
+      name: id
+      in: path
+      description: StockItem id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    RequestIdParameter:
+      name: id
+      in: path
+      description: Request id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    ToBuyListIdParameter:
+      name: id
+      in: path
+      description: ToBuyList id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    CartIdParameter:
+      name: id
+      in: path
+      description: Cart id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    MakerIdParameter:
+      name: id
+      in: path
+      description: Maker id.
+      required: true
+      schema:
+        type: integer
+      example: 2
     CriteriaIdParameter:
       name: id
       in: path
       description: Criteria id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+      
+    
+    
+    
+      
+      
+        
+    ItemIdParameter:
+      name: id
+      in: path
+      description: Item id.
       required: true
       schema:
         type: integer
@@ -308,6 +3653,413 @@ components:
   # Reusable request body
   #-------------------------------  
   requestBodies:
+    CreateUserRequestBody:
+      description: user data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserModel'
+            
+    UpdateUserRequestBody:
+      description: user data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+    
+    CreateProfileRequestBody:
+      description: profile data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProfileModel'
+            
+    UpdateProfileRequestBody:
+      description: profile data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+                    
+    CreateGroupRequestBody:
+      description: group data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GroupModel'
+            
+    UpdateGroupRequestBody:
+      description: group data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroupModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: edited testname
+                    
+    CreateGroceryRequestBody:
+      description: grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GroceryModel'
+            
+    UpdateGroceryRequestBody:
+      description: grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4                
+                    
+    CreateProductRequestBody:
+      description: product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductModel'
+            
+    UpdateProductRequestBody:
+      description: product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProductModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+
+    CreateCategoryGroceryRequestBody:
+      description: category_grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryGroceryModel'
+            
+    UpdateCategoryGroceryRequestBody:
+      description: category_grocery data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryGroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test category name request
+    
+    CreateCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryProductModel'
+            
+    UpdateCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryProductModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test category name
+  
+    CreateSubCategoryGroceryRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubCategoryGroceryModel'
+            
+    UpdateSubCategoryGroceryRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryGroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+    
+    CreateSubCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubCategoryProductModel'
+            
+    UpdateSubCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+  
+    CreateStockItemRequestBody:
+      description: stockItem data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StockItemModel'
+            
+    UpdateStockItemRequestBody:
+      description: stockItem data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              - $ref: '#/components/schemas/StockItemPriceOption'
+              - $ref: '#/components/schemas/StockItemShopOption'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria days
+                    example: 4
+                  alarm_date:
+                    type: string
+                    format: int64
+                    description: alarm date
+                    example: 2023-04-24
+                  quantity:
+                    type: integer
+                    format: int64
+                    description: price
+                    example: 44
+  
+    CreateRequestRequestBody:
+      description: request data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestModel'
+            
+    UpdateRequestRequestBody:
+      description: request data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/RequestModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  request_type:
+                    type: string
+                    format: int64
+                    description: category of request
+                    example: category_requests
+                  request_name:
+                    type: string
+                    format: int64
+                    description: request name
+                    example: toilet edited
+  
+    CreateToBuyListRequestBody:
+      description: to_buy_list data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ToBuyListModel'
+            
+    UpdateToBuyListRequestBody:
+      description: to_buy_list data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ToBuyListModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item id
+                    example: 4
+                    
+    CreateCartRequestBody:
+      description: cart data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CartModel'
+            
+    UpdateCartRequestBody:
+      description: cart data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CartModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5
+                  price:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5555
+  
+    CreateMakerRequestBody:
+      description: maker data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MakerModel'
+            
+    UpdateMakerRequestBody:
+      description: maker data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/MakerModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: criteria
+                    example: edit kaou
+    
     CreateCriteriaRequestBody:
       description: criteria data
       required: true
@@ -324,6 +4076,7 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/CriteriaModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   group_id:
                     type: integer
@@ -340,19 +4093,709 @@ components:
                     format: int64
                     description: category of product
                     example: 55
-                  updated_at:
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    CreateItemRequestBody:
+      description: item data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ItemModel'
+            
+    UpdateItemRequestBody:
+      description: item data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ItemModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
                     type: string
                     format: int64
-                    description: updated datetime
-                    example: 2023-01-21T17:32:28Z
-                      
-    
+                    description: category of product
+                    example: Beef
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: item id
+                    example: 4
 
 
   #-------------------------------
   # Reusable responses
   #-------------------------------
   responses:
+    GetUsersResponse:
+        description: User lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - users
+              - type: object
+              - properties:
+                  users:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/UserModel'
+                      - type: object
+                        $ref: '#/components/schemas/UserModelTwo'
+    GetUserResponse:
+      description: Got user.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/UserModel'
+              
+    UpdateUserResponse:
+      description: Updated user.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/UserModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  email:
+                    type: string
+                    format: int64
+                    description: mail address
+                    example: testedited@gmail.com
+                  encrypted_password:
+                    type: string
+                    format: int64
+                    description: password
+                    example: passwordedited
+    
+    
+    GetProfilesResponse:
+        description: Profile lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - profiles
+              - type: object
+              - properties:
+                  profiles:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ProfileModel'
+                      - type: object
+                        $ref: '#/components/schemas/ProfileModelTwo'
+    
+    GetProfileResponse:
+      description: Got profile.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              
+    UpdateProfileResponse:
+      description: Updated profile.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProfileModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: testnametwo
+                  nickname:
+                    type: string
+                    format: int64
+                    description: nickname
+                    example: test nicky
+                  roommante_number:
+                    type: integer
+                    format: int64
+                    description: roommante number
+                    example: 3
+                  prefecture:
+                    type: string
+                    format: int64
+                    description: prefecture
+                    example: 沖縄県
+    
+    GetGroupsResponse:
+        description: Group lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - groups
+              - type: object
+              - properties:
+                  groups:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/GroupModel'
+                      - type: object
+                        $ref: '#/components/schemas/GroupModelTwo'
+    
+    GetGroupResponse:
+      description: Got group.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroupModel'
+              
+    UpdateGroupResponse:
+      description: Updated group.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroupModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: edited testname
+    
+    GetGrocerysResponse:
+        description: Grocery lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - grocerys
+              - type: object
+              - properties:
+                  grocerys:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/GroceryModel'
+                      - type: object
+                        $ref: '#/components/schemas/GroceryModelTwo'
+    
+    GetGroceryResponse:
+      description: Got grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              
+    UpdateGroceryResponse:
+      description: Updated grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/GroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 4
+    
+    GetProductsResponse:
+        description: Product lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - products
+              - type: object
+              - properties:
+                  products:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ProductModel'
+                      - type: object
+                        $ref: '#/components/schemas/ProductModelTwo'
+    
+    GetProductResponse:
+      description: Got product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProductModel'
+              
+    UpdateProductResponse:
+      description: Updated product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ProductModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  subcategory_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+                  category_id:
+                    type: integer
+                    format: int64
+                    description: item_id
+                    example: 6
+
+    GetCategoryGroceriesResponse:
+        description: CategoryGrocery lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - category_groceries
+              - type: object
+              - properties:
+                  category_groceries:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CategoryGroceryModel'
+                      - type: object
+                        $ref: '#/components/schemas/CategoryGroceryModelTwo'
+    
+    GetCategoryGroceryResponse:
+      description: Got category_grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryGroceryModel'
+              
+    UpdateCategoryGroceryResponse:
+      description: Updated category_grocery.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryGroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test category name request
+
+    GetCategoryProductsResponse:
+        description: CategoryProduct lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - category_products
+              - type: object
+              - properties:
+                  category_products:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CategoryProductModel'
+                      - type: object
+                        $ref: '#/components/schemas/CategoryProductModelTwo'
+    
+    GetCategoryProductResponse:
+      description: Got category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryProductModel'
+              
+    UpdateCategoryProductResponse:
+      description: Updated category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CategoryProductModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test category name request
+    
+    GetSubCategoryGroceriesResponse:
+        description: SubCategoryGrocery lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - sub_category_groceries
+              - type: object
+              - properties:
+                  sub_category_groceries:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryGroceryModel'
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryGroceryModelTwo'
+    
+    GetSubCategoryGroceryResponse:
+      description: Got category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryGroceryModel'
+              
+    UpdateSubCategoryGroceryResponse:
+      description: Updated category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryGroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+
+    GetSubCategoryProductsResponse:
+        description: SubCategoryProduct lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - sub_category_products
+              - type: object
+              - properties:
+                  sub_category_products:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryProductModel'
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryProductModelTwo'
+    
+    GetSubCategoryProductResponse:
+      description: Got category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductModel'
+              
+    UpdateSubCategoryProductResponse:
+      description: Updated category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+    
+    GetStockItemsResponse:
+        description: StockItem lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - stockItems
+              - type: object
+              - properties:
+                  stockItems:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/StockItemModel'
+                      - type: object
+                        $ref: '#/components/schemas/StockItemModelTwo'
+    
+    GetStockItemResponse:
+      description: Got stockItem.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              
+    UpdateStockItemResponse:
+      description: Updated stockItem.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              - $ref: '#/components/schemas/StockItemPriceOption'
+              - $ref: '#/components/schemas/StockItemShopOption'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria days
+                    example: 4
+                  alarm_date:
+                    type: string
+                    format: int64
+                    description: alarm date
+                    example: 2023-04-24
+                  quantity:
+                    type: integer
+                    format: int64
+                    description: price
+                    example: 44
+    
+    GetRequestsResponse:
+        description: Request lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - requests
+              - type: object
+              - properties:
+                  requests:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/RequestModel'
+                      - type: object
+                        $ref: '#/components/schemas/RequestModelTwo'
+    
+    GetRequestResponse:
+      description: Got request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/RequestModel'
+              
+    UpdateRequestResponse:
+      description: Updated request.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/RequestModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  request_type:
+                    type: string
+                    format: int64
+                    description: category of request
+                    example: category_requests
+                  request_name:
+                    type: string
+                    format: int64
+                    description: request name
+                    example: toilet edited
+    
+    GetToBuyListsResponse:
+        description: ToBuyList lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - to_buy_lists
+              - type: object
+              - properties:
+                  to_buy_lists:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ToBuyListModel'
+                      - type: object
+                        $ref: '#/components/schemas/ToBuyListModelTwo'
+    
+    GetToBuyListResponse:
+      description: Got to_buy_list.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ToBuyListModel'
+              
+    UpdateToBuyListResponse:
+      description: Updated to_buy_list.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ToBuyListModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                   item_id:
+                    type: integer
+                    format: int64
+                    description: item id
+                    example: 4
+    
+    GetCartsResponse:
+        description: Cart lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - carts
+              - type: object
+              - properties:
+                  carts:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/CartModel'
+                      - type: object
+                        $ref: '#/components/schemas/CartModelTwo'
+    
+    GetCartResponse:
+      description: Got cart.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CartModel'
+              
+    UpdateCartResponse:
+      description: Updated cart.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/CartModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5
+                  price:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 5555
+    
+    GetMakersResponse:
+      description: Maker lists
+      content:
+        application/json:
+          schema:
+            allOf:
+            - required:
+              - makers
+            - type: object
+            - properties:
+                makers:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      $ref: '#/components/schemas/MakerModel'
+                    - type: object
+                      $ref: '#/components/schemas/MakerModelTwo'
+    
+    GetMakerResponse:
+      description: Got maker.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/MakerModel'
+              
+    UpdateMakerResponse:
+      description: Updated maker.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/MakerModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: criteria
+                    example: edit kaou
+    
     GetCriteriasResponse:
         description: Criteria lists
         content:
@@ -387,22 +4830,79 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/CriteriaModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
-                  email:
+                  group_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  item_id:
+                    type: integer
+                    format: int64
+                    description: criteria id
+                    example: 5
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria
+                    example: 55
+                    
+                    
+                    
+                    
+    
+    
+    
+    
+    
+    
+    GetItemsResponse:
+        description: Item lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - items
+              - type: object
+              - properties:
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/ItemModel'
+                      - type: object
+                        $ref: '#/components/schemas/ItemModelTwo'
+    
+    GetItemResponse:
+      description: Got item.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ItemModel'
+              
+    UpdateItemResponse:
+      description: Updated item.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ItemModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
                     type: string
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
-                    type: string
+                    description: category of product
+                    example: Beef
+                  criteria:
+                    type: integer
                     format: int64
-                    description: password
-                    example: passwordedited
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-03-21T17:32:28Z
+                    description: item id
+                    example: 4
 
     
     BadRequestResponse:
