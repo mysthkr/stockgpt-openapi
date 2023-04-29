@@ -49,7 +49,11 @@ tags:
   - name: CategoryProduct
     description: Access to category_product model.
   - name: SubCategoryGrocery
+    description: Access to sub_category_grocery model.
+  - name: SubCategoryProduct
     description: Access to sub_category_product model.
+  - name: StockItem
+    description: Access to stockItem model.
   
     
     
@@ -1106,7 +1110,268 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
 
-
+  /sub_category_products:
+    post:
+      tags:
+      - "SubCategoryProduct"
+      summary: CreateSubCategoryProduct
+      operationId: createSubCategoryProduct
+      requestBody:
+        $ref: '#/components/requestBodies/CreateSubCategoryProductRequestBody'
+      responses:
+        '200':
+          description: 作成済み日用品サブカテゴリー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubCategoryProductModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "SubCategoryProduct"
+      summary: 日用品サブカテゴリー一覧取得
+      description: 日用品サブカテゴリー一覧
+      operationId: getSubCategoryProductList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+    get:
+      tags:
+        - "SubCategoryProduct"
+      summary: GetSubCategoryProductById
+      description: |-
+        Get category_product by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "SubCategoryProduct"
+      summary: UpdateSubCategoryProductById
+      description: |-
+        Update category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateSubCategoryProductRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateSubCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "SubCategoryProduct"
+      summary: DeleteSubCategoryProductById
+      description: |-
+        Delete category_product by id.
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /sub_category_products/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+    get:
+      tags:
+        - "SubCategoryProduct"
+      summary: EditSubCategoryProductById
+      parameters:
+        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSubCategoryProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+  /stock_items:
+    post:
+      tags:
+      - "StockItem"
+      summary: CreateStockItem
+      operationId: createStockItem
+      requestBody:
+        $ref: '#/components/requestBodies/CreateStockItemRequestBody'
+      responses:
+        '200':
+          description: 作成済みユーザー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockItemModel'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+                
+  
+    get:
+      tags:
+      - "StockItem"
+      summary: ユーザ一覧取得
+      description: ユーザー一覧
+      operationId: getStockItemList
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemsResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /stock_items/{id}:
+    parameters:
+      - $ref: '#/components/parameters/StockItemIdParameter'
+    get:
+      tags:
+        - "StockItem"
+      summary: GetStockItemById
+      description: |-
+        Get stockItem by id.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+    patch:
+      tags:
+        - "StockItem"
+      summary: UpdateStockItemById
+      description: |-
+        Update stockItem by id.
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateStockItemRequestBody'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateStockItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
+    delete:
+      tags:
+        - "StockItem"
+      summary: DeleteStockItemById
+      description: |-
+        Delete stockItem by id.
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictErrorResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+          
+  /stock_items/{id}/edit:
+    parameters:
+      - $ref: '#/components/parameters/StockItemIdParameter'
+    get:
+      tags:
+        - "StockItem"
+      summary: EditStockItemById
+      parameters:
+        - $ref: '#/components/parameters/StockItemIdParameter'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetStockItemResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  
   
   
   
@@ -1876,6 +2141,182 @@ components:
           description: name
           example: 3
   
+  #-------------------------------
+  # SubCategoryProduct schema
+  #-------------------------------  
+    SubCategoryProductDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 2
+    
+    SubCategoryProductStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 2
+          
+    SubCategoryProductStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: category_product id
+          example: 3
+          
+    SubCategoryProductModel:
+      type: object
+      description: SubCategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryProductStaticProps'
+        
+    SubCategoryProductModelTwo:
+      type: object
+      description: SubCategoryProduct
+      allOf:
+        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryProductStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
+      properties:
+        name:
+          type: string
+          format: int64
+          description: name
+          example: test category name
+        category_id:
+          type: string
+          format: int64
+          description: name
+          example: 3
+  
+  #-------------------------------
+  # StockItem schema
+  #-------------------------------  
+    StockItemDynamicProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria days
+          example: 2
+        alarm_date:
+          type: string
+          format: int64
+          description: alarm date
+          example: 2023-01-21
+        quantity:
+          type: integer
+          format: int64
+          description: price
+          example: 2
+    
+    StockItemStaticProps:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: stockItem id
+          example: 2
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 2
+          
+    StockItemStaticPropsTwo:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: stockItem id
+          example: 3
+        group_id:
+          type: integer
+          format: int64
+          description: group id
+          example: 3
+          
+    StockItemPriceOption:
+      type: object
+      properties:
+        price:
+          type: integer
+          format: int64
+          description: price
+          example: 300
+          
+    StockItemShopOption:
+      type: object
+      properties:
+        shop_id:
+          type: integer
+          format: int64
+          description: price
+          example: 3
+          
+    StockItemModel:
+      type: object
+      description: StockItem
+      allOf:
+        - $ref: '#/components/schemas/StockItemDynamicProps'
+        - $ref: '#/components/schemas/StockItemStaticProps'
+        
+    StockItemModelTwo:
+      type: object
+      description: StockItem
+      allOf:
+        - $ref: '#/components/schemas/StockItemDynamicProps'
+        - $ref: '#/components/schemas/StockItemStaticPropsTwo'
+        - $ref: '#/components/schemas/StockItemPriceOption'
+        - $ref: '#/components/schemas/StockItemShopOption'
+      properties:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria days
+          example: 3
+        alarm_date:
+          type: string
+          format: int64
+          description: alarm date
+          example: 2023-03-23
+        quantity:
+          type: integer
+          format: int64
+          description: price
+          example: 33
+  
+  
+  
+  
   
   
   
@@ -2067,7 +2508,24 @@ components:
       schema:
         type: integer
       example: 2
-
+    SubCategoryProductIdParameter:
+      name: id
+      in: path
+      description: SubCategoryProduct id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+    StockItemIdParameter:
+      name: id
+      in: path
+      description: StockItem id.
+      required: true
+      schema:
+        type: integer
+      example: 2
+      
+      
     
       
       
@@ -2100,7 +2558,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/UserDynamicProps'
+              - $ref: '#/components/schemas/UserModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   email:
@@ -2129,7 +2587,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ProfileDynamicProps'
+              - $ref: '#/components/schemas/ProfileModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
@@ -2168,7 +2626,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/GroupDynamicProps'
+              - $ref: '#/components/schemas/GroupModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
@@ -2192,7 +2650,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/GroceryDynamicProps'
+              - $ref: '#/components/schemas/GroceryModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   item_id:
@@ -2226,7 +2684,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/ProductDynamicProps'
+              - $ref: '#/components/schemas/ProductModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   item_id:
@@ -2260,7 +2718,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CategoryGroceryDynamicProps'
+              - $ref: '#/components/schemas/CategoryGroceryModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
@@ -2284,7 +2742,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/CategoryProductDynamicProps'
+              - $ref: '#/components/schemas/CategoryProductModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
@@ -2308,7 +2766,7 @@ components:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/SubCategoryGroceryDynamicProps'
+              - $ref: '#/components/schemas/SubCategoryGroceryModel'
               - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
@@ -2321,6 +2779,75 @@ components:
                     format: int64
                     description: category_id
                     example: 4
+    
+    CreateSubCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubCategoryProductModel'
+            
+    UpdateSubCategoryProductRequestBody:
+      description: category_product data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+  
+    CreateStockItemRequestBody:
+      description: stockItem data
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/StockItemModel'
+            
+    UpdateStockItemRequestBody:
+      description: stockItem data
+      required: true
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              - $ref: '#/components/schemas/StockItemPriceOption'
+              - $ref: '#/components/schemas/StockItemShopOption'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria days
+                    example: 4
+                  alarm_date:
+                    type: string
+                    format: int64
+                    description: alarm date
+                    example: 2023-04-24
+                  quantity:
+                    type: integer
+                    format: int64
+                    description: price
+                    example: 44
+  
+  
+  
+  
+  
   
   
   
@@ -2742,6 +3269,109 @@ components:
                     description: category_id
                     example: 4
 
+    GetSubCategoryProductsResponse:
+        description: SubCategoryProduct lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - sub_category_products
+              - type: object
+              - properties:
+                  sub_category_products:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryProductModel'
+                      - type: object
+                        $ref: '#/components/schemas/SubCategoryProductModelTwo'
+    
+    GetSubCategoryProductResponse:
+      description: Got category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductModel'
+              
+    UpdateSubCategoryProductResponse:
+      description: Updated category_product.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/SubCategoryProductModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
+              - properties:
+                  name:
+                    type: string
+                    format: int64
+                    description: name
+                    example: test sub category name request
+                  category_id:
+                    type: string
+                    format: int64
+                    description: category_id
+                    example: 4
+    
+    GetStockItemsResponse:
+        description: StockItem lists
+        content:
+          application/json:
+            schema:
+              allOf:
+              - required:
+                - stockItems
+              - type: object
+              - properties:
+                  stockItems:
+                    type: array
+                    items:
+                      oneOf:
+                      - type: object
+                        $ref: '#/components/schemas/StockItemModel'
+                      - type: object
+                        $ref: '#/components/schemas/StockItemModelTwo'
+    
+    GetStockItemResponse:
+      description: Got stockItem.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              
+    UpdateStockItemResponse:
+      description: Updated stockItem.
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/StockItemModel'
+              - $ref: '#/components/schemas/StockItemPriceOption'
+              - $ref: '#/components/schemas/StockItemShopOption'
+              - properties:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria days
+                    example: 4
+                  alarm_date:
+                    type: string
+                    format: int64
+                    description: alarm date
+                    example: 2023-04-24
+                  quantity:
+                    type: integer
+                    format: int64
+                    description: price
+                    example: 44
+    
+    
+    
+    
     
     
     

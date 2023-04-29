@@ -34,25 +34,25 @@ servers:
         default: '443'
 
 tags:
-  - name: SubCategoryProduct
+  - name: SubCategoryGrocery
     description: Access to category_product model.
 
 paths:
-  /sub_category_products:
+  /sub_category_groceries:
     post:
       tags:
-      - "SubCategoryProduct"
-      summary: CreateSubCategoryProduct
-      operationId: createSubCategoryProduct
+      - "SubCategoryGrocery"
+      summary: CreateSubCategoryGrocery
+      operationId: createSubCategoryGrocery
       requestBody:
-        $ref: '#/components/requestBodies/CreateSubCategoryProductRequestBody'
+        $ref: '#/components/requestBodies/CreateSubCategoryGroceryRequestBody'
       responses:
         '200':
           description: 作成済み食料品サブカテゴリー
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubCategoryProductModel'
+                $ref: '#/components/schemas/SubCategoryGroceryModel'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -63,13 +63,13 @@ paths:
   
     get:
       tags:
-      - "SubCategoryProduct"
+      - "SubCategoryGrocery"
       summary: 食料品サブカテゴリー一覧取得
       description: 食料品サブカテゴリー一覧
-      operationId: getSubCategoryProductList
+      operationId: getSubCategoryGroceryList
       responses:
         '200':
-          $ref: '#/components/responses/GetSubCategoryProductsResponse'
+          $ref: '#/components/responses/GetSubCategoryGroceriesResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -77,18 +77,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /sub_category_products/{id}:
+  /sub_category_groceries/{id}:
     parameters:
-      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
     get:
       tags:
-        - "SubCategoryProduct"
-      summary: GetSubCategoryProductById
+        - "SubCategoryGrocery"
+      summary: GetSubCategoryGroceryById
       description: |-
         Get category_product by id.
       responses:
         '200':
-          $ref: '#/components/responses/GetSubCategoryProductResponse'
+          $ref: '#/components/responses/GetSubCategoryGroceryResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -102,17 +102,17 @@ paths:
           
     patch:
       tags:
-        - "SubCategoryProduct"
-      summary: UpdateSubCategoryProductById
+        - "SubCategoryGrocery"
+      summary: UpdateSubCategoryGroceryById
       description: |-
         Update category_product by id.
       parameters:
-        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+        - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
       requestBody:
-        $ref: '#/components/requestBodies/UpdateSubCategoryProductRequestBody'
+        $ref: '#/components/requestBodies/UpdateSubCategoryGroceryRequestBody'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateSubCategoryProductResponse'
+          $ref: '#/components/responses/UpdateSubCategoryGroceryResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -126,15 +126,15 @@ paths:
   
     delete:
       tags:
-        - "SubCategoryProduct"
-      summary: DeleteSubCategoryProductById
+        - "SubCategoryGrocery"
+      summary: DeleteSubCategoryGroceryById
       description: |-
         Delete category_product by id.
       parameters:
-        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+        - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetSubCategoryProductResponse'
+          $ref: '#/components/responses/GetSubCategoryGroceryResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedResponse'
         '403':
@@ -146,18 +146,18 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
           
-  /sub_category_products/{id}/edit:
+  /sub_category_groceries/{id}/edit:
     parameters:
-      - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+      - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
     get:
       tags:
-        - "SubCategoryProduct"
-      summary: EditSubCategoryProductById
+        - "SubCategoryGrocery"
+      summary: EditSubCategoryGroceryById
       parameters:
-        - $ref: '#/components/parameters/SubCategoryProductIdParameter'
+        - $ref: '#/components/parameters/SubCategoryGroceryIdParameter'
       responses:
         '200':
-          $ref: '#/components/responses/GetSubCategoryProductResponse'
+          $ref: '#/components/responses/GetSubCategoryGroceryResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':
@@ -172,10 +172,12 @@ paths:
 components:
   schemas:
   #-------------------------------
-  # SubCategoryProduct schema
+  # SubCategoryGrocery schema
   #-------------------------------  
-    SubCategoryProductDynamicProps:
+    SubCategoryGroceryDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
       properties:
         name:
           type: string
@@ -187,53 +189,43 @@ components:
           format: int64
           description: name
           example: 2
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
     
-    SubCategoryProductStaticProps:
+    SubCategoryGroceryStaticProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
           type: integer
           format: int64
           description: category_product id
           example: 2
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
           
-    SubCategoryProductStaticPropsTwo:
+    SubCategoryGroceryStaticPropsTwo:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
       properties:
         id:
           type: integer
           format: int64
           description: category_product id
           example: 3
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-39T22:32:22Z
           
-    SubCategoryProductModel:
+    SubCategoryGroceryModel:
       type: object
-      description: SubCategoryProduct
+      description: SubCategoryGrocery
       allOf:
-        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
-        - $ref: '#/components/schemas/SubCategoryProductStaticProps'
+        - $ref: '#/components/schemas/SubCategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryGroceryStaticProps'
         
-    SubCategoryProductModelTwo:
+    SubCategoryGroceryModelTwo:
       type: object
-      description: SubCategoryProduct
+      description: SubCategoryGrocery
       allOf:
-        - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
-        - $ref: '#/components/schemas/SubCategoryProductStaticPropsTwo'
+        - $ref: '#/components/schemas/SubCategoryGroceryDynamicProps'
+        - $ref: '#/components/schemas/SubCategoryGroceryStaticPropsTwo'
+        - $ref: '#/components/schemas/SecondUpdateTimestamp'
       properties:
         name:
           type: string
@@ -245,23 +237,18 @@ components:
           format: int64
           description: name
           example: 3
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-03-11T13:32:28Z
           
-    SubCategoryProductModels:
+    SubCategoryGroceryModels:
       type: object
       properties:
-        sub_category_products:
+        sub_category_groceries:
           type: array
           items:
             oneOf:
             - type: object
-              $ref: '#/components/schemas/SubCategoryProductModel'
+              $ref: '#/components/schemas/SubCategoryGroceryModel'
             - type: object
-              $ref: '#/components/schemas/SubCategoryProductModelTwo'
+              $ref: '#/components/schemas/SubCategoryGroceryModelTwo'
               
     
     ErrorModel:
@@ -284,10 +271,10 @@ components:
   # Reusable operation parameters
   #-------------------------------
   parameters:
-    SubCategoryProductIdParameter:
+    SubCategoryGroceryIdParameter:
       name: id
       in: path
-      description: SubCategoryProduct id.
+      description: SubCategoryGrocery id.
       required: true
       schema:
         type: integer
@@ -297,22 +284,23 @@ components:
   # Reusable request body
   #-------------------------------  
   requestBodies:
-    CreateSubCategoryProductRequestBody:
+    CreateSubCategoryGroceryRequestBody:
       description: category_product data
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/SubCategoryProductModel'
+            $ref: '#/components/schemas/SubCategoryGroceryModel'
             
-    UpdateSubCategoryProductRequestBody:
+    UpdateSubCategoryGroceryRequestBody:
       description: category_product data
       required: true
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/SubCategoryProductDynamicProps'
+              - $ref: '#/components/schemas/SubCategoryGroceryDynamicProps'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
                     type: string
@@ -324,11 +312,6 @@ components:
                     format: int64
                     description: category_id
                     example: 4
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-04-21T17:32:28Z
             
     
 
@@ -337,40 +320,41 @@ components:
   # Reusable responses
   #-------------------------------
   responses:
-    GetSubCategoryProductsResponse:
-        description: SubCategoryProduct lists
+    GetSubCategoryGroceriesResponse:
+        description: SubCategoryGrocery lists
         content:
           application/json:
             schema:
               allOf:
               - required:
-                - sub_category_products
+                - sub_category_groceries
               - type: object
               - properties:
-                  sub_category_products:
+                  sub_category_groceries:
                     type: array
                     items:
                       oneOf:
                       - type: object
-                        $ref: '#/components/schemas/SubCategoryProductModel'
+                        $ref: '#/components/schemas/SubCategoryGroceryModel'
                       - type: object
-                        $ref: '#/components/schemas/SubCategoryProductModelTwo'
+                        $ref: '#/components/schemas/SubCategoryGroceryModelTwo'
     
-    GetSubCategoryProductResponse:
+    GetSubCategoryGroceryResponse:
       description: Got category_product.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/SubCategoryProductModel'
+              - $ref: '#/components/schemas/SubCategoryGroceryModel'
               
-    UpdateSubCategoryProductResponse:
+    UpdateSubCategoryGroceryResponse:
       description: Updated category_product.
       content:
         application/json:
           schema:
             allOf:
-              - $ref: '#/components/schemas/SubCategoryProductModel'
+              - $ref: '#/components/schemas/SubCategoryGroceryModel'
+              - $ref: '#/components/schemas/EditUpdateTimestamp'
               - properties:
                   name:
                     type: string
@@ -382,11 +366,6 @@ components:
                     format: int64
                     description: category_id
                     example: 4
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-04-21T17:32:28Z
 
     
     BadRequestResponse:

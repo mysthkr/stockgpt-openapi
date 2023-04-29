@@ -176,26 +176,29 @@ components:
   #-------------------------------  
     StockItemDynamicProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/UpdateTimestamp'
       properties:
-        email:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria days
+          example: 2
+        alarm_date:
           type: string
           format: int64
-          description: mail address
-          example: test@gmail.com
-        encrypted_password:
-          type: string
+          description: alarm date
+          example: 2023-01-21
+        quantity:
+          type: integer
           format: int64
-          description: password
-          example: password
-        updated_at:
-          type: string
-          format: int64
-          description: updated datetime
-          example: 2023-01-21T17:32:28Z
-          
+          description: price
+          example: 2
     
     StockItemStaticProps:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateTimestamp'
       properties:
         id:
           type: integer
@@ -207,14 +210,11 @@ components:
           format: int64
           description: group id
           example: 2
-        created_at:
-          type: string
-          format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
           
     StockItemStaticPropsTwo:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/SecondCreateTimestamp'
       properties:
         id:
           type: integer
@@ -226,25 +226,24 @@ components:
           format: int64
           description: group id
           example: 3
-        created_at:
-          type: string
+          
+    StockItemPriceOption:
+      type: object
+      properties:
+        price:
+          type: integer
           format: int64
-          description: created datetime
-          example: 2023-01-21T17:32:28Z
+          description: price
+          example: 300
           
-    StockItemAdminOption:
+    StockItemShopOption:
       type: object
       properties:
-        admin:
-          type: boolean
-          example: true
-          
-    StockItemBusinessOption:
-      type: object
-      properties:
-        business:
-          type: boolean
-          example: false
+        shop_id:
+          type: integer
+          format: int64
+          description: price
+          example: 3
           
     StockItemModel:
       type: object
@@ -252,8 +251,6 @@ components:
       allOf:
         - $ref: '#/components/schemas/StockItemDynamicProps'
         - $ref: '#/components/schemas/StockItemStaticProps'
-        - $ref: '#/components/schemas/StockItemAdminOption'
-        - $ref: '#/components/schemas/StockItemBusinessOption'
         
     StockItemModelTwo:
       type: object
@@ -261,27 +258,24 @@ components:
       allOf:
         - $ref: '#/components/schemas/StockItemDynamicProps'
         - $ref: '#/components/schemas/StockItemStaticPropsTwo'
-        - $ref: '#/components/schemas/StockItemAdminOption'
-        - $ref: '#/components/schemas/StockItemBusinessOption'
+        - $ref: '#/components/schemas/StockItemPriceOption'
+        - $ref: '#/components/schemas/StockItemShopOption'
       properties:
-        email:
+        criteria:
+          type: integer
+          format: int64
+          description: criteria days
+          example: 3
+        alarm_date:
           type: string
           format: int64
-          description: mail address
-          example: test2@gmail.com
-        encrypted_password:
-          type: string
+          description: alarm date
+          example: 2023-03-23
+        quantity:
+          type: integer
           format: int64
-          description: password
-          example: password2
-        updated_at:
-          type: string
-          format: int64
-          description: uodated time
-          example: 2023-02-21T17:32:28Z
-        admin:
-          type: boolean
-          example: false
+          description: price
+          example: 33
           
     StockItemModels:
       type: object
@@ -345,22 +339,24 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/StockItemDynamicProps'
+              - $ref: '#/components/schemas/StockItemPriceOption'
+              - $ref: '#/components/schemas/StockItemShopOption'
               - properties:
-                  email:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria days
+                    example: 4
+                  alarm_date:
                     type: string
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
-                    type: string
+                    description: alarm date
+                    example: 2023-04-24
+                  quantity:
+                    type: integer
                     format: int64
-                    description: password
-                    example: passwordedited
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-03-21T17:32:28Z
+                    description: price
+                    example: 44
             
     
 
@@ -403,22 +399,24 @@ components:
           schema:
             allOf:
               - $ref: '#/components/schemas/StockItemModel'
+              - $ref: '#/components/schemas/StockItemPriceOption'
+              - $ref: '#/components/schemas/StockItemShopOption'
               - properties:
-                  email:
+                  criteria:
+                    type: integer
+                    format: int64
+                    description: criteria days
+                    example: 4
+                  alarm_date:
                     type: string
                     format: int64
-                    description: mail address
-                    example: testedited@gmail.com
-                  encrypted_password:
-                    type: string
+                    description: alarm date
+                    example: 2023-04-24
+                  quantity:
+                    type: integer
                     format: int64
-                    description: password
-                    example: passwordedited
-                  updated_at:
-                    type: string
-                    format: int64
-                    description: updated datetime
-                    example: 2023-03-21T17:32:28Z
+                    description: price
+                    example: 44
 
     
     BadRequestResponse:

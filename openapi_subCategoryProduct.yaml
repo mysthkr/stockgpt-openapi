@@ -35,7 +35,7 @@ servers:
 
 tags:
   - name: SubCategoryProduct
-    description: Access to category_product model.
+    description: Access to sub_category_product model.
 
 paths:
   /sub_category_products:
